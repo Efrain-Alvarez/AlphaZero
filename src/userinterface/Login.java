@@ -1,11 +1,12 @@
+package userinterface;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
 public class Login extends JFrame implements ActionListener {
 
-    private JTextField usernameField;
-    private JPasswordField passwordField;
+    private final JTextField usernameField;
+    private final JPasswordField passwordField;
 
     public Login() {
         // Create GUI elements
