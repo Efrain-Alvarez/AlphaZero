@@ -1,1 +1,5 @@
 /tests/backend/ConfigFileTest.java
+.idea
+.git
+**/*.class
+**/*.iml
