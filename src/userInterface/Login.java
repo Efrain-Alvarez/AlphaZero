@@ -1,4 +1,4 @@
-package userinterface;
+package userInterface;
 
 import java.awt.*;
 import java.awt.event.*;
