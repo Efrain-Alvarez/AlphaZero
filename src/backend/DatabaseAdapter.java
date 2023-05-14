@@ -1,10 +1,11 @@
 package backend;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import backend.ConfigFile;
-import backend.InventoryList;
+import backend.InventoryItem;
 import jdk.jshell.spi.ExecutionControl;
 
 /**
@@ -78,7 +79,7 @@ public class DatabaseAdapter {
      * @return an <code>ArrayList</code> of all inventory items stored on this database
      * @throws ExecutionControl.NotImplementedException
      */
-    public InventoryList getItems() throws ExecutionControl.NotImplementedException {
+    public ArrayList<InventoryItem> getItems() throws ExecutionControl.NotImplementedException {
         throw new ExecutionControl.NotImplementedException("Query for inventory items not yet implemented");
     }
 
