@@ -32,7 +32,7 @@ public class Login extends JFrame implements ActionListener {
         // Set frame properties
         setTitle("Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(300, 150);
+        setSize(500, 250);
         setVisible(true);
     }
 
@@ -41,7 +41,7 @@ public class Login extends JFrame implements ActionListener {
         String password = new String(passwordField.getPassword());
 
         // Check if username and password are valid
-        //do we really need 2 seperate logins??? don't we just need 
+        //creating only one interface
         if (username.equals("admin") && password.equals("password")) {
             JOptionPane.showMessageDialog(this, "Login successful!");
         } else {
@@ -50,7 +50,9 @@ public class Login extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new Login();
+        Login login = new Login();
+        login.setVisible(true);
+
     }
 }
 
