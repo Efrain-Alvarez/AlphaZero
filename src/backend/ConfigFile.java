@@ -69,9 +69,9 @@ public class ConfigFile {
     }
 
     public void dumpToStdout() {
-        for (ConfigSection sec: sections) {
+        for (ConfigSection sec : sections) {
             System.out.println("Section: " + sec.getName());
-            for(ConfigOption opt: sec.getOpts()) {
+            for (ConfigOption opt : sec.getOpts()) {
                 System.out.println(opt);
             }
         }
@@ -152,9 +152,13 @@ public class ConfigFile {
             this.value = value.toLowerCase();
         }
 
-        public String getKey() { return key; }
+        public String getKey() {
+            return key;
+        }
 
-        public String getValue() { return value; }
+        public String getValue() {
+            return value;
+        }
 
         public String toString() {
             return this.key + "=" + this.value;
