@@ -48,7 +48,26 @@ class ConfigFileTest {
         }
     }
 
-    @org.junit.jupiter.api.AfterEach
-    void tearDown() {
+
+    @Test
+    public void testRejectsSectionlessOption() {
+        try {
+            String path = "/home/etorres/Programming/cs370/Project/repo/tests/backendTest/configfile-test.ini";
+            var s = assertThrows(RuntimeException.class, () -> new ConfigFile(path));
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+    }
+
+    @Test
+    public void testReadsAllOpts() {
+        int expectedOpts = 5;
+        try {
+            ConfigFile f = new ConfigFile("/home/etorres/Programming/cs370/Project/repo/config.ini");
+            var s = assertThrows(IllegalArgumentException.class, () -> f.getOption("database", "nope"));
+            assertEquals(f.size(), expectedOpts);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
     }
 }
