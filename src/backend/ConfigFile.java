@@ -3,6 +3,7 @@ package backend;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOError;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -125,8 +126,12 @@ public class ConfigFile {
          * @param line key-value pair
          */
         public void parseOpt(String line) {
-            String[] parts = line.split("\s*=\s*");
-            opts.add(new ConfigOption(parts[0], parts[1]));
+            try {
+                String[] parts = line.split("\s*=\s*");
+                opts.add(new ConfigOption(parts[0], parts[1]));
+            } catch (ArrayIndexOutOfBoundsException e) {
+                throw new IOError(e);
+            }
         }
 
         public String getName() {
