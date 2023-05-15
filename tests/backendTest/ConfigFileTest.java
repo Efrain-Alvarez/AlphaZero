@@ -8,11 +8,6 @@ import java.io.FileNotFoundException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ConfigFileTest {
-
-    @org.junit.jupiter.api.BeforeEach
-    void setUp() {
-    }
-
     @Test
     public void testNormalRead() {
         try {
@@ -32,7 +27,7 @@ class ConfigFileTest {
     public void testThrowsSectionNotFound() {
         try {
             ConfigFile f = new ConfigFile("/home/etorres/Programming/cs370/Project/repo/config.ini");
-            IllegalArgumentException s = assertThrows(IllegalArgumentException.class, () -> f.getOption("nope", "someopt"));
+            var s = assertThrows(IllegalArgumentException.class, () -> f.getOption("nope", "someopt"));
         } catch (Exception e) {
             System.out.println(e.toString());
         }
@@ -42,7 +37,7 @@ class ConfigFileTest {
     public void testThrowsOptionNotFound() {
         try {
             ConfigFile f = new ConfigFile("/home/etorres/Programming/cs370/Project/repo/config.ini");
-            IllegalArgumentException s = assertThrows(IllegalArgumentException.class, () -> f.getOption("database", "nope"));
+            var s = assertThrows(IllegalArgumentException.class, () -> f.getOption("database", "nope"));
         } catch (Exception e) {
             System.out.println(e.toString());
         }
