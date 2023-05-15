@@ -76,8 +76,38 @@ public class ConfigFile {
         }
     }
 
+    /**
+     * Retrieve an option from a specific section.
+     * For instance if you have the following config file:<br><br>
+     * <code>
+     *     [section]<br>
+     *     opt1 = val1<br>
+     *     opt2 = val2<br>
+     * </code><br>
+     * and in your code you had:<br>
+     * <code>
+     *     ConfigFile f = new ConfigFile("/path/to/config");
+     * </code><br>
+     * then a call to retrieve opt1 would be:<br>
+     * <code>f.getOption("section", "opt1"</code>
+     *
+     * @param section the section to look for denoted by [option]
+     * @param option  the specific option in the given section
+     * @return the value for the option in the given section
+     * @throws IllegalArgumentException if the config section or option does not exist
+     */
     public String getOption(String section, String option) throws IllegalArgumentException {
-        return null;
+        for (ConfigSection sec : sections) {
+            if (sec.getName().equals(section)) {
+                for (ConfigOption opt : sec.getOpts()) {
+                    if (opt.getKey().equals(option)) {
+                        return opt.getValue();
+                    }
+                }
+                throw new IllegalArgumentException("Unable to find config option: " + section + " in file");
+            }
+        }
+        throw new IllegalArgumentException("Unable to find config section: " + section + " in file");
     }
 
     private class ConfigSection {
