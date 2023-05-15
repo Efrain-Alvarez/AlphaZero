@@ -1,11 +1,9 @@
-package backend;
+package backend.config;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOError;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -101,67 +99,13 @@ public class ConfigFile {
         for (ConfigSection sec : sections) {
             if (sec.getName().equals(section)) {
                 for (ConfigOption opt : sec.getOpts()) {
-                    if (opt.getKey().equals(option)) {
-                        return opt.getValue();
+                    if (opt.key().equals(option)) {
+                        return opt.value();
                     }
                 }
                 throw new IllegalArgumentException("Unable to find config option: " + section + " in file");
             }
         }
         throw new IllegalArgumentException("Unable to find config section: " + section + " in file");
-    }
-
-    private class ConfigSection {
-        private final ArrayList<ConfigOption> opts;
-        private final String name; // section name
-
-        public ConfigSection(String name) {
-            opts = new ArrayList<ConfigOption>();
-            this.name = name;
-        }
-
-        /**
-         * Parse a key-value pair and add to this config section.
-         *
-         * @param line key-value pair
-         */
-        public void parseOpt(String line) {
-            try {
-                String[] parts = line.split("\s*=\s*");
-                opts.add(new ConfigOption(parts[0], parts[1]));
-            } catch (ArrayIndexOutOfBoundsException e) {
-                throw new IOError(e);
-            }
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public ArrayList<ConfigOption> getOpts() {
-            return opts;
-        }
-    }
-
-    private class ConfigOption {
-        private final String key;
-        private final String value;
-
-        public ConfigOption(String key, String value) {
-            this.key = key.toLowerCase();
-            this.value = value.toLowerCase();
-        }
-
-        public String getKey() {
-            return key;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public String toString() {
-            return this.key + "=" + this.value;
-        }
     }
 }

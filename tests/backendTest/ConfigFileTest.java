@@ -1,6 +1,6 @@
 package backendTest;
 
-import backend.ConfigFile;
+import backend.config.ConfigFile;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
