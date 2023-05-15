@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * information for display, as well as the program's backend for scheduling purposes.
  */
 public class Reservation {
-    private ArrayList<String> preorderItems, specialRequests;
+    private final ArrayList<String> preorderItems, specialRequests;
     private String name, phoneNumber;
     private ZonedDateTime date;
     int partySize;
