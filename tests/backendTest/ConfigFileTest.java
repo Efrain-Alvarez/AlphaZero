@@ -12,7 +12,6 @@ class ConfigFileTest {
     public void testNormalRead() {
         try {
             ConfigFile f = new ConfigFile("/home/etorres/Programming/cs370/Project/repo/config.ini");
-            f.dumpToStdout();
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         }
