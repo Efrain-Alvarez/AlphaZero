@@ -110,7 +110,19 @@ public class DatabaseAdapter {
      * @return false if any of the requirements above are not met, false otherwise
      * @throws SQLException if there was a problem updating the database
      */
-    public boolean addReservation(Reservation r) throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("Operation for adding inventory not yet implemented");
+    public boolean addReservation(Reservation r) throws SQLException {
+        return false;
+    }
+
+    /**
+     * Query the database and retrieve a list of any reservations that are found.<br>
+     * Please refer to <code>Reservation</code> to learn more about what is return by this method.
+     *
+     * @return a list of <code>Reservation</code>s that were queried from the database
+     * @throws SQLException if the database throws an error while running a query
+     */
+    public ArrayList<Reservation> getReservations() throws SQLException {
+        ArrayList<Reservation> reservations = new ArrayList<>();
+        return reservations;
     }
 }
