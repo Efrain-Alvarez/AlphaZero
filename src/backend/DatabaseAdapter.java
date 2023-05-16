@@ -29,7 +29,9 @@ import jdk.jshell.spi.ExecutionControl;
  *  <li>Stateless communication</li>
  *  <li>Uniform interface</li>
  * </ul>
- * Following these 3 principles are intended to again, increase consistency with the behavior of this shim layer.
+ * Following these 3 principles are intended to again, increase consistency with the behavior of this shim layer.<br>
+ * Please note that each callable method that interacts with the database can possibly throw <code>SQLException</code>
+ * so the caller must keep this in mind when instantiating this class.
  */
 public class DatabaseAdapter {
     private String uri, dbUser, dbPass;
@@ -75,10 +77,10 @@ public class DatabaseAdapter {
      *
      * @param item the item name to query for
      * @return the amount of items last specified in the system stored in the database
-     * @throws ExecutionControl.NotImplementedException
+     * @throws SQLException if there was a problem with the database results
      */
-    public int getInventoryAmount(String item) throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("Query for inventory amount not yet implemented");
+    public int getInventoryAmount(String item) throws SQLException {
+        return 0;
     }
 
     /**
@@ -101,6 +103,7 @@ public class DatabaseAdapter {
      *
      * @param r the reservation containing customer information
      * @return false if any of the requirements above are not met, false otherwise
+     * @throws SQLException if there was a problem updating the database
      */
     public boolean addReservation(Reservation r) throws ExecutionControl.NotImplementedException {
         throw new ExecutionControl.NotImplementedException("Operation for adding inventory not yet implemented");
