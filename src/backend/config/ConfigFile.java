@@ -66,15 +66,6 @@ public class ConfigFile {
         }
     }
 
-    public void dumpToStdout() {
-        for (ConfigSection sec : sections) {
-            System.out.println("Section: " + sec.getName());
-            for (ConfigOption opt : sec.getOpts()) {
-                System.out.println(opt);
-            }
-        }
-    }
-
     /**
      * Retrieve an option from a specific section.
      * For instance if you have the following config file:<br><br>
@@ -107,5 +98,27 @@ public class ConfigFile {
             }
         }
         throw new IllegalArgumentException("Unable to find config section: " + section + " in file");
+    }
+
+    public void dumpToStdout() {
+        for (ConfigSection sec : sections) {
+            System.out.println("Section: " + sec.getName());
+            for (ConfigOption opt : sec.getOpts()) {
+                System.out.println(opt);
+            }
+        }
+    }
+
+    /**
+     * @return the total number of options that this config file has parsed
+     */
+    public int size() {
+        int result = 0;
+        for (ConfigSection sec : sections) {
+            for (ConfigOption opt : sec.getOpts()) {
+                result++;
+            }
+        }
+        return result;
     }
 }
