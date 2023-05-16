@@ -56,7 +56,7 @@ class ConfigFileTest {
 
     @Test
     public void testReadsAllOpts() {
-        int expectedOpts = 5;
+        int expectedOpts = 7;
         try {
             ConfigFile f = new ConfigFile("/home/etorres/Programming/cs370/Project/repo/config.ini");
             assertThrows(IllegalArgumentException.class, () -> f.getOption("database", "nope"));
