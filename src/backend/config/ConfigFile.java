@@ -85,9 +85,9 @@ public class ConfigFile {
      */
     public String getOption(String section, String option) throws IllegalArgumentException {
         for (ConfigSection sec : sections) {
-            if (sec.getName().equals(section)) {
+            if (sec.getName().equals(section.toLowerCase())) {
                 for (ConfigOption opt : sec.getOpts()) {
-                    if (opt.key().equals(option)) {
+                    if (opt.key().equals(option.toLowerCase())) {
                         return opt.value();
                     }
                 }
