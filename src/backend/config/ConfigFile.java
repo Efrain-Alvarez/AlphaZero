@@ -16,7 +16,6 @@ import java.util.regex.Pattern;
  */
 
 public class ConfigFile {
-    private final File configFile;
     private final ArrayList<ConfigSection> sections;
 
     /**
@@ -25,8 +24,8 @@ public class ConfigFile {
      * @param filePath absolute path of configuration file on system
      */
     public ConfigFile(String filePath) throws FileNotFoundException, IOError {
-        configFile = new File(filePath);
-        sections = new ArrayList<ConfigSection>();
+        final File configFile = new File(filePath);
+        sections = new ArrayList<>();
 
         // Parse config file line-by-line
         Pattern comment = Pattern.compile("^;");
@@ -53,14 +52,12 @@ public class ConfigFile {
 
                     currentSection = new ConfigSection(sectionName);
                     sections.add(currentSection);
-                    continue;
                 } else if (configOption.matcher(line).matches()) {
                     // file is in wrong format
                     if (currentSection == null) {
                         throw new RuntimeException("Config file is invalid, no config section found");
                     }
                     currentSection.parseOpt(line);
-                    continue;
                 }
             }
         }
@@ -115,7 +112,7 @@ public class ConfigFile {
     public int size() {
         int result = 0;
         for (ConfigSection sec : sections) {
-            for (ConfigOption opt : sec.getOpts()) {
+            for (ConfigOption ignored : sec.getOpts()) {
                 result++;
             }
         }
