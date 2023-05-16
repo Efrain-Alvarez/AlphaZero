@@ -1,4 +1,4 @@
-package backend;
+package backend.database;
 
 import backend.config.ConfigFile;
 import jdk.jshell.spi.ExecutionControl;

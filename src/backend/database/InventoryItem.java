@@ -1,4 +1,4 @@
-package backend;
+package backend.database;
 
 /**
  * Representation of a single list item on an inventory.

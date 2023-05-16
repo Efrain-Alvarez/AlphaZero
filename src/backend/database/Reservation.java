@@ -1,4 +1,4 @@
-package backend;
+package backend.database;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
