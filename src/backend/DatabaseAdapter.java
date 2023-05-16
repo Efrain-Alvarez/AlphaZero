@@ -1,8 +1,13 @@
 package backend;
 
-import java.util.ArrayList;
-
+import backend.config.ConfigFile;
 import jdk.jshell.spi.ExecutionControl;
+
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * A class intended to interact with JDBC. This acts as a
