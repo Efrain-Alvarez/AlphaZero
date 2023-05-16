@@ -32,7 +32,11 @@ import jdk.jshell.spi.ExecutionControl;
  * Following these 3 principles are intended to again, increase consistency with the behavior of this shim layer.
  */
 public class DatabaseAdapter {
-    private String uri, dbName, dbUser, dbPass;
+    private String uri, dbUser, dbPass;
+    private static final String dbClassname = "com.mysql.cj.jdbc.Driver";
+    private static final Logger logger = Logger.getLogger(DatabaseAdapter.class.getName());
+    private final ConfigFile cf;
+    private final Properties credentials;
 
     /**
      * Initialize the shim layer between the frontend and the database.
@@ -51,9 +55,17 @@ public class DatabaseAdapter {
      * </code>
      *
      * @param configPath the path to the program that has the database credentials
+     * @throws FileNotFoundException if ConfigPath references a non-existent location for a config file
+     * @throws RuntimeException      if an option on the config file couldn't be read
      */
-    public DatabaseAdapter(String configPath) throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("Class DatabaseAdapter not yet implemented");
+    public DatabaseAdapter(String configPath) throws FileNotFoundException {
+        cf = new ConfigFile(configPath);
+        String dbName = cf.getOption("database", "dbName");
+        uri = "jdbc:mysql://" + cf.getOption("database", "dbaddress") + "/" + dbName;
+
+        // initialize credentials for database access
+        credentials = new Properties();
+        credentials.put("user", cf.getOption("database", "dbuser"));
     }
 
     /**
