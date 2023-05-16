@@ -31,7 +31,7 @@ public class ConfigFile {
         // Parse config file line-by-line
         Pattern comment = Pattern.compile("^;");
         Pattern configSection = Pattern.compile("^\\[[\\w]+\\]$");
-        Pattern configOption = Pattern.compile("\\w+\s*=\s*[\\w\s]+");
+        Pattern configOption = Pattern.compile("\\w+\s*=\s*[\\w\s.-]+");
 
         if (!configFile.isAbsolute())
             throw new FileNotFoundException("File " + filePath + " is not an absolute path");
