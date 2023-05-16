@@ -14,22 +14,22 @@ class ConfigFileTest {
             ConfigFile f = new ConfigFile("/home/etorres/Programming/cs370/Project/repo/config.ini");
             f.dumpToStdout();
         } catch (FileNotFoundException e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
     }
 
     @Test
     public void testThrowsFileNotFound() {
-        FileNotFoundException t = assertThrows(FileNotFoundException.class, () -> new ConfigFile("/home/etorres/Programming/cs370/Project/repo/non-existent.ini"));
+        assertThrows(FileNotFoundException.class, () -> new ConfigFile("/home/etorres/Programming/cs370/Project/repo/non-existent.ini"));
     }
 
     @Test
     public void testThrowsSectionNotFound() {
         try {
             ConfigFile f = new ConfigFile("/home/etorres/Programming/cs370/Project/repo/config.ini");
-            var s = assertThrows(IllegalArgumentException.class, () -> f.getOption("nope", "someopt"));
+            assertThrows(IllegalArgumentException.class, () -> f.getOption("nope", "someopt"));
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
     }
 
@@ -37,9 +37,9 @@ class ConfigFileTest {
     public void testThrowsOptionNotFound() {
         try {
             ConfigFile f = new ConfigFile("/home/etorres/Programming/cs370/Project/repo/config.ini");
-            var s = assertThrows(IllegalArgumentException.class, () -> f.getOption("database", "nope"));
+            assertThrows(IllegalArgumentException.class, () -> f.getOption("database", "nope"));
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
     }
 
@@ -48,9 +48,9 @@ class ConfigFileTest {
     public void testRejectsSectionlessOption() {
         try {
             String path = "/home/etorres/Programming/cs370/Project/repo/tests/backendTest/configfile-test.ini";
-            var s = assertThrows(RuntimeException.class, () -> new ConfigFile(path));
+            assertThrows(RuntimeException.class, () -> new ConfigFile(path));
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
     }
 
@@ -59,10 +59,10 @@ class ConfigFileTest {
         int expectedOpts = 5;
         try {
             ConfigFile f = new ConfigFile("/home/etorres/Programming/cs370/Project/repo/config.ini");
-            var s = assertThrows(IllegalArgumentException.class, () -> f.getOption("database", "nope"));
+            assertThrows(IllegalArgumentException.class, () -> f.getOption("database", "nope"));
             assertEquals(f.size(), expectedOpts);
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
     }
 }
