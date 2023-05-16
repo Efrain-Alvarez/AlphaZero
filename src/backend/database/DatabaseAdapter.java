@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * A class intended to interact with JDBC. This acts as a
@@ -69,6 +70,7 @@ public class DatabaseAdapter {
         cf = new ConfigFile(configPath);
         String dbName = cf.getOption("database", "dbName");
         uri = "jdbc:mysql://" + cf.getOption("database", "dbaddress") + "/" + dbName;
+        logger.log(Level.CONFIG, "URI: " + uri);
 
         // initialize credentials for database access
         credentials = new Properties();
