@@ -1,11 +1,7 @@
 package backend;
 
-import java.sql.*;
 import java.util.ArrayList;
-import java.util.Properties;
 
-import backend.ConfigFile;
-import backend.InventoryItem;
 import jdk.jshell.spi.ExecutionControl;
 
 /**
