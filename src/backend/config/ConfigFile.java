@@ -28,7 +28,7 @@ public class ConfigFile {
      *
      * @param filePath absolute path of configuration file on system
      * @throws FileNotFoundException if path points to a file that does not exist
-     * @throws IOError if an option in the config file could not be read
+     * @throws IOError               if an option in the config file could not be read
      */
     public ConfigFile(String filePath) throws FileNotFoundException, IOError {
         logger.log(Level.FINER, "Trying to create a ConfigFile object...");
