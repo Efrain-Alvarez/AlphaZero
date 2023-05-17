@@ -66,4 +66,30 @@ class TestDatabaseAdapter {
             db.deleteInventoryItem("Test Item");
         }
     }
+
+    @Test
+    void testGetReservations() throws Exception {
+        try (DatabaseAdapter db = new DatabaseAdapter(configPath)) {
+            var reservations = db.getReservations();
+        }
+    }
+
+    @Test
+    void testAddDeleteReservation() throws Exception {
+        try (DatabaseAdapter db = new DatabaseAdapter(configPath)) {
+            Reservation r = new Reservation("test name", "test number", LocalDateTime.now(), 1, 1);
+            db.addReservation(r);
+            db.deleteReservationByName(r.getName());
+        }
+    }
+
+    @Test
+    void testDate() throws Exception {
+        try (DatabaseAdapter db = new DatabaseAdapter(configPath)) {
+            // parse valid date and time
+            assertDoesNotThrow(() -> db.parseDateAndTime("2023-05-17", "14", "00"));
+            //assertDoesNotThrow(() -> db.parseDateAndTime("05/17/23", "14", "00"));
+            assertThrows(DateTimeParseException.class, () -> db.parseDateAndTime("05/17/23", "0", "00"));
+        }
+    }
 }
