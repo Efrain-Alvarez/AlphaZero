@@ -27,5 +27,11 @@ class TestInventoryItem {
         InventoryItem i = new InventoryItem("Item", 1);
         i.setAmount(2);
         assertEquals(2, i.getItemCount());
+        assertThrows(RuntimeException.class, () -> i.setAmount(-1));
+    }
+
+    @Test
+    void testRejectsNegativeAmount() {
+        assertThrows(RuntimeException.class, () -> new InventoryItem("Item", -1));
     }
 }

@@ -33,7 +33,10 @@ public class InventoryItem {
         return amount;
     }
 
-    public void setAmount(int newAmount) {
+    public void setAmount(int newAmount) throws RuntimeException{
+        if (newAmount < 0) {
+            throw new RuntimeException("Item amount " + newAmount + " was negative, must be positive");
+        }
         amount = newAmount;
     }
 }
