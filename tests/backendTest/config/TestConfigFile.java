@@ -1,4 +1,4 @@
-package backendTest;
+package backendTest.config;
 
 import backend.config.ConfigFile;
 import org.junit.jupiter.api.Test;

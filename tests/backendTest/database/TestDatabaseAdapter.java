@@ -1,4 +1,4 @@
-package backendTest;
+package backendTest.database;
 
 import backend.database.DatabaseAdapter;
 import org.junit.jupiter.api.Test;
