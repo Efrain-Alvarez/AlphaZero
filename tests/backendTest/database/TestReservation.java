@@ -8,8 +8,8 @@ class TestReservation {
     @Test
     void testDefaultConstructor() {
         Reservation r = new Reservation();
-        Assertions.assertEquals("", r.getName());
-        Assertions.assertEquals("", r.getPhoneNumber());
+        Assertions.assertEquals("unknown", r.getName());
+        Assertions.assertEquals("unknown", r.getPhoneNumber());
         Assertions.assertEquals(0, r.getPartySize());
         Assertions.assertEquals(0, r.getPreorderItems().size());
         Assertions.assertEquals(0, r.getSpecialRequests().size());
