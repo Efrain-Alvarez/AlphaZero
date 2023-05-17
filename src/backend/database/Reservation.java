@@ -30,13 +30,13 @@ public class Reservation {
         this.date = date;
         this.partySize = partySize;
 
-        preorderItems = new ArrayList<String>();
-        specialRequests = new ArrayList<String>();
+        preorderItems = new ArrayList<>();
+        specialRequests = new ArrayList<>();
     }
 
     /**
-     * Add a menu item to this reservation's preorder list.
-     * This is a helper for the functionality for a customer preordering a menu item to aid with
+     * Add a menu item to this reservation's pre-order list.
+     * This is a helper for the functionality for a customer pre-ordering a menu item to aid with
      * inventory purposes before the actual reservation date.
      *
      * @param item the menu item to order
@@ -85,7 +85,7 @@ public class Reservation {
     }
 
     /**
-     * @return <code>ArrayList</code> of preordered menu items
+     * @return <code>ArrayList</code> of pre-ordered menu items
      */
     public ArrayList<String> getPreorderItems() {
         return preorderItems;
