@@ -17,6 +17,19 @@ public class Reservation {
     private final int partySize;
 
     /**
+     * Default constructor for <code>Reservation</code>.
+     */
+    public Reservation() {
+        this.name = "unknown";
+        this.phoneNumber = "unknown";
+        this.date = null;
+        this.partySize = 0;
+
+        preorderItems = new ArrayList<>();
+        specialRequests = new ArrayList<>();
+    }
+
+    /**
      * Create a single reservation entry for a single party.
      *
      * @param name        name of customer making reservation under

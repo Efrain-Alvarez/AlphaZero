@@ -7,15 +7,19 @@ public class InventoryItem {
     private String itemName;
     private int amount;
 
+    /**
+     * Default constructor for <code>InventoryItem</code>.
+     */
     public InventoryItem() {
-        itemName = "unnamed item";
+        itemName = "unknown";
         amount = 0;
     }
 
     /**
      * Constructor for <code>InventoryItem</code> class. Note that any names are converted to lowercase
      * for consistency.
-     * @param name name of item
+     *
+     * @param name   name of item
      * @param amount a positive integer indicating quantity of item on hand
      * @throws RuntimeException if the amount was negative
      */
