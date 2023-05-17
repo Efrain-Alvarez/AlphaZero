@@ -102,7 +102,7 @@ public class ConfigFile {
                         return opt.value();
                     }
                 }
-                throw new IllegalArgumentException("Unable to find config option: " + section + " in file");
+                throw new IllegalArgumentException("Unable to find config option: " + option + " in file");
             }
         }
         throw new IllegalArgumentException("Unable to find config section: " + section + " in file");
