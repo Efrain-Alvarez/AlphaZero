@@ -12,9 +12,17 @@ public class InventoryItem {
         amount = 0;
     }
 
-    public InventoryItem(String name, int amount) {
-        this.itemName = name;
+    /**
+     * @param name name of item
+     * @param amount a positive integer indicating quantity of item on hand
+     * @throws RuntimeException if the amount was negative
+     */
+    public InventoryItem(String name, int amount) throws RuntimeException {
+        this.itemName = name.toLowerCase();
         this.amount = amount;
+
+        if (amount < 0)
+            throw new RuntimeException("Item amount " + amount + " was negative, must be positive");
     }
 
     public String getItemName() {
