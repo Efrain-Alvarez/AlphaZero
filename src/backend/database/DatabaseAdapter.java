@@ -40,8 +40,8 @@ import java.util.logging.Logger;
  */
 public class DatabaseAdapter implements AutoCloseable {
     private static final Logger logger = Logger.getLogger(DatabaseAdapter.class.getName());
-    private final ConfigFile cf;
-    private final Properties credentials;
+    private final Connection databaseConnection;
+
 
     /**
      * Initialize the shim layer between the frontend and the database.
@@ -62,16 +62,21 @@ public class DatabaseAdapter implements AutoCloseable {
      * @param configPath the path to the program that has the database credentials
      * @throws FileNotFoundException if ConfigPath references a non-existent location for a config file
      * @throws RuntimeException      if an option on the config file couldn't be read
+     * @throws SQLException if there was a problem establishing a connection to the SQL database
      */
-    public DatabaseAdapter(String configPath) throws FileNotFoundException {
-        cf = new ConfigFile(configPath);
-        String dbName = cf.getOption("database", "dbName");
-        uri = "jdbc:mysql://" + cf.getOption("database", "dbaddress") + "/" + dbName;
+    public DatabaseAdapter(String configPath) throws FileNotFoundException, SQLException, RuntimeException {
+        ConfigFile cf = new ConfigFile(configPath);
+        String dbName = cf.getOption("database", "dbname");
+        String dbPort = cf.getOption("database", "dbport");
+        String uri = "jdbc:mysql://" + cf.getOption("database", "dbaddress") + ":" + dbPort + "/" + dbName;
         logger.log(Level.CONFIG, "URI: " + uri);
 
         // initialize credentials for database access
-        credentials = new Properties();
+        Properties credentials = new Properties();
         credentials.put("user", cf.getOption("database", "dbuser"));
+        credentials.put("password", cf.getOption("database", "dbpass"));
+
+        databaseConnection = DriverManager.getConnection(uri, credentials);
     }
 
     /**
