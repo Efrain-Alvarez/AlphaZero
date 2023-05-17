@@ -271,7 +271,23 @@ public class DatabaseAdapter implements AutoCloseable {
     }
 
     /**
-     * Modify a selected reservation.
+     * Modify a selected reservation by ID.
+     *
+     * @param id the reservation to modify
+     */
+    public void changeReservationDateByID(int id) {
+    }
+
+    /**
+     * Modify a selected reservation by name.
+     *
+     * @param name the name of the reservation to search by
+     */
+    public void changeReservationDateByName(String name) {
+    }
+
+    /**
+     * Delete a reservation from the table by reservation ID.
      *
      * @param r the reservation to modify
      */
