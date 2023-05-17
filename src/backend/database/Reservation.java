@@ -1,8 +1,9 @@
 package backend.database;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Objects;
+
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 /**
  * This class is a representation of a singular reservation on the system.
@@ -11,9 +12,9 @@ import java.util.Objects;
  */
 public class Reservation {
     private final ArrayList<String> preorderItems, specialRequests;
-    private String name, phoneNumber;
-    private ZonedDateTime date;
-    int partySize;
+    private final String name, phoneNumber;
+    private final LocalDateTime date;
+    private final int partySize;
 
     /**
      * Create a single reservation entry for a single party.
@@ -22,11 +23,11 @@ public class Reservation {
      * @param phoneNumber phone number to contact customer with
      * @param date        date to attach to reservation
      */
-    public Reservation(String name, String phoneNumber, ZonedDateTime date, int partySize) {
+    public Reservation(String name, String phoneNumber, LocalDateTime date, int partySize) {
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.partySize = partySize;
         this.date = date;
+        this.partySize = partySize;
 
         preorderItems = new ArrayList<String>();
         specialRequests = new ArrayList<String>();
@@ -69,9 +70,16 @@ public class Reservation {
     }
 
     /**
-     * @return date attached to this reservation
+     * @return string representation of date attached to this reservation
      */
-    public ZonedDateTime getDate() {
+    public String getDateString() {
+        return date.format(ISO_LOCAL_DATE_TIME);
+    }
+
+    /**
+     * @return this <code>Reservation</code>'s date
+     */
+    public LocalDateTime getDate() {
         return date;
     }
 
