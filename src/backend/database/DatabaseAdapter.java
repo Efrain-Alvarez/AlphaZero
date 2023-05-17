@@ -154,23 +154,7 @@ public class DatabaseAdapter implements AutoCloseable {
     }
 
     /**
-     * Add a reservation to this database. Before adding a reservation, the following must be true:<br>
-     * <ol>
-     *     <li>There must be no conflicting reservations time-wise</li>
-     *     <li>The date must not be before the time of entry into the system</li>
-     *     <li>There must be open spaces on the seating arrangement with respect to party size</li>
-     * </ol>
-     *
-     * @param r the reservation containing customer information
-     * @return false if any of the requirements above are not met, false otherwise
-     * @throws SQLException if there was a problem updating the database
-     */
-    public boolean addReservation(Reservation r) throws SQLException {
-        return false;
-    }
-
-    /**
-     * Query the database and retrieve a list of any reservations that are found.<br>
+     * Query the database and retrieve a list of any reservations for all tables for the entire day.<br>
      * Please refer to <code>Reservation</code> to learn more about what is return by this method.
      *
      * @return a list of <code>Reservation</code>s that were queried from the database
@@ -182,14 +166,108 @@ public class DatabaseAdapter implements AutoCloseable {
              ResultSet reservationEntries = s.executeQuery("select * from reservations")) {
 
             while (reservationEntries.next()) {
-                int reservationID = reservationEntries.getInt("reservationID");
-                int partySize = reservationEntries.getInt("partySize");
-                int tableNumber = reservationEntries.getInt("tableNumber");
-                String customerName = reservationEntries.getString("customerName");
-                String phoneNumber = reservationEntries.getString("phoneNumber");
+                int reservationID = reservationEntries.getInt("ReservationID");
+                int partySize = reservationEntries.getInt("PartySize");
+                int tableNumber = reservationEntries.getInt("TableNumber");
+                String customerName = reservationEntries.getString("CustomerName");
+                String phoneNumber = reservationEntries.getString("PhoneNumber");
+                LocalDateTime dateTime = reservationEntries.getTimestamp("DateTime").toLocalDateTime();
+
+                Reservation curr = new Reservation(customerName, phoneNumber, dateTime, partySize, tableNumber);
+
+                // Get item preorders
+                try (Statement t = databaseConnection.createStatement();
+                     ResultSet preorderItems = t.executeQuery(String.format("select * from preorderItems where `ReservationID` = %d", reservationID))) {
+                    while (preorderItems.next()) {
+                        curr.addPreOrderItem(preorderItems.getString("Item"));
+                    }
+                }
+
+                // Get special requests
+                try (Statement u = databaseConnection.createStatement();
+                     ResultSet specialRequests = u.executeQuery(String.format("select * from specialRequests where `ReservationID` = %d", reservationID))) {
+                    while (specialRequests.next()) {
+                        curr.addSpecialRequest(specialRequests.getString("Request"));
+                    }
+                }
+
+                reservations.add(curr);
+
             }
         }
         return reservations;
+    }
+
+    /**
+     * Retrieve reservations for a particular table.
+     *
+     * @param tableNumber the table to query
+     * @return a list of reservations at the given table number
+     * @throws SQLException if there was a database error querying the data
+     */
+    public ArrayList<Reservation> getReservationsForTable(int tableNumber) throws SQLException {
+        try (Statement s = databaseConnection.createStatement();
+             ResultSet reservationEntries = s.executeQuery(String.format("select * from reservations where `TableNumber` = %d", tableNumber));) {
+            ArrayList<Reservation> reservations = new ArrayList<>();
+
+            while (reservationEntries.next()) {
+                int reservationID = reservationEntries.getInt("ReservationID");
+                int partySize = reservationEntries.getInt("PartySize");
+                String customerName = reservationEntries.getString("CustomerName");
+                String phoneNumber = reservationEntries.getString("PhoneNumber");
+                LocalDateTime dateTime = reservationEntries.getTimestamp("DateTime").toLocalDateTime();
+
+                Reservation curr = new Reservation(customerName, phoneNumber, dateTime, partySize, tableNumber);
+
+                // Get item preorders and special requests
+                try (ResultSet preorderItems = s.executeQuery(String.format("select * from preorderItems where `ReservationID` = %d", reservationID));
+                     ResultSet specialRequests = s.executeQuery(String.format("select * from specialRequests where `ReservationID` = %d", reservationID))) {
+                    while (preorderItems.next()) {
+                        curr.addPreOrderItem(preorderItems.getString("Item"));
+                    }
+                    while (specialRequests.next()) {
+                        curr.addSpecialRequest(specialRequests.getString("Request"));
+                    }
+                }
+
+                reservations.add(curr);
+
+            }
+            return reservations;
+        }
+    }
+
+    /**
+     * Add a reservation to this database.
+     *
+     * @param r the reservation containing customer information
+     * @throws SQLException if there was a problem updating the database
+     */
+    public void addReservation(Reservation r) throws SQLException {
+        try (Statement s = databaseConnection.createStatement()) {
+            // Step 1: check tableArrangement table to ensure no conflicts
+            // Step 2: check reservation table to ensure no identical reservation
+            // Step 3: store Reservation object's data into reservations table
+            String t = Timestamp.valueOf(r.getDate()).toString();
+            String cmd = String.format("INSERT INTO reservations(CustomerName, PhoneNumber, DateTime, PartySize, TableNumber) " +
+                    "VALUES ('%s', '%s', '%s', %d, %d)", r.getName(), r.getPhoneNumber(), t, r.getPartySize(), r.getTableNumber());
+            s.executeUpdate(cmd);
+            // Step 4: unpack Reservation object's preorder items and store each line into the preorderItems table
+            // Step 5: unpack Reservation object's special requests and store each line into the specialRequests table
+        }
+    }
+
+    /**
+     * Heler function for creating a <code>LocalDateTime</code> object.
+     *
+     * @param date the calendar day, preferably in ISO format (YYYY-MM-DD)
+     * @param hr   the 2 digit hour to store (24hr time)
+     * @param min  the 2 digit minutes to store (24hr time)
+     * @return a LocalDateTime object containing the date and time described by the above
+     * @throws DateTimeParseException if this method is unable to parse certain info
+     */
+    public LocalDateTime parseDateAndTime(String date, String hr, String min) throws DateTimeParseException {
+        return LocalDateTime.parse(String.format("%sT%s:%s", date, hr, min));
     }
 
     /**
