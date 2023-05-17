@@ -3,8 +3,6 @@ package backend.database;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-
 /**
  * This class is a representation of a singular reservation on the system.
  * It is intended as a helper for the program frontend to store and retrieve reservation
@@ -62,13 +60,6 @@ public class Reservation {
      */
     public String getPhoneNumber() {
         return phoneNumber;
-    }
-
-    /**
-     * @return string representation of date attached to this reservation
-     */
-    public String getDateString() {
-        return date.format(ISO_LOCAL_DATE_TIME);
     }
 
     /**
