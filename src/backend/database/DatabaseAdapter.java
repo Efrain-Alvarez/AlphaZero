@@ -289,10 +289,46 @@ public class DatabaseAdapter implements AutoCloseable {
     /**
      * Delete a reservation from the table by reservation ID.
      *
-     * @param r the reservation to modify
+     * @param id the ID to search the reservation by
+     * @throws SQLException if there was an error deleting the info
      */
-    public void changeReservation(Reservation r) {
+    public void deleteReservationByID(int id) throws SQLException {
+        try (Statement s = databaseConnection.createStatement();
+             ResultSet reservations = s.executeQuery(String.format("select * from reservations where `ReservationID` = %d", id))) {
+            while (reservations.next()) {
+                // Step 2: delete the row from the reservation table by ID
+                s.executeUpdate(String.format("delete from reservations where `ReservationID` = %d", id));
+                // Step 3: delete the associated rows from the preorderItems table by ID
+                s.executeUpdate(String.format("delete from preorderItems where `ReservationID` = %d", id));
+                // Step 4: delete the associated rows from the specialRequests table by ID
+                s.executeUpdate(String.format("delete from specialRequests where `ReservationID` = %d", id));
+            }
+        }
+    }
 
+    /**
+     * Delete a reservation from the table by name.
+     *
+     * @param name the customer name to search the reservation by
+     * @throws SQLException if there was an error deleting the info
+     */
+    public void deleteReservationByName(String name) throws SQLException {
+        try (Statement s = databaseConnection.createStatement();
+             Statement t = databaseConnection.createStatement();
+             Statement u = databaseConnection.createStatement();
+             Statement v = databaseConnection.createStatement();
+             ResultSet reservations = s.executeQuery(String.format("select * from reservations where `CustomerName` = '%s'", name))) {
+            while (reservations.next()) {
+                // Step 1: retrieve reservation info by name, we need the ID
+                int id = reservations.getInt("ReservationID");
+                // Step 2: delete the row from the reservation table by ID
+                t.executeUpdate(String.format("delete from reservations where `ReservationID` = %d", id));
+                // Step 3: delete the associated rows from the preorderItems table by ID
+                u.executeUpdate(String.format("delete from preorderItems where `ReservationID` = %d", id));
+                // Step 4: delete the associated rows from the specialRequests table by ID
+                v.executeUpdate(String.format("delete from specialRequests where `ReservationID` = %d", id));
+            }
+        }
     }
 
     /**
