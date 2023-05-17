@@ -92,8 +92,8 @@ public class DatabaseAdapter implements AutoCloseable {
              ResultSet itemEntries = s.executeQuery("select * from inventory")) {
 
             while (itemEntries.next()) {
-                String itemName = itemEntries.getString("itemName");
-                int itemCount = itemEntries.getInt("itemCount");
+                String itemName = itemEntries.getString("ItemName");
+                int itemCount = itemEntries.getInt("ItemCount");
                 items.add(new InventoryItem(itemName, itemCount));
             }
         }
@@ -111,11 +111,11 @@ public class DatabaseAdapter implements AutoCloseable {
      */
     public int getInventoryAmount(String item) {
         try (Statement s = databaseConnection.createStatement();
-             ResultSet itemResult = s.executeQuery(String.format("SELECT * FROM inventory WHERE (`itemName` = '%s');", item))) {
+             ResultSet itemResult = s.executeQuery(String.format("SELECT * FROM inventory WHERE `ItemName` = '%s';", item))) {
             if (!itemResult.next()) {
                 return -1;
             } else {
-                return itemResult.getInt("itemCount");
+                return itemResult.getInt("ItemCount");
             }
 
         } catch (Exception e) {
@@ -135,7 +135,7 @@ public class DatabaseAdapter implements AutoCloseable {
      */
     public void addInventoryItem(String itemName, int count) throws SQLException {
         try (Statement s = databaseConnection.createStatement()) {
-            s.executeUpdate(String.format("INSERT INTO inventory(itemName, itemCount) VALUES('%s', %d);", itemName, count));
+            s.executeUpdate(String.format("INSERT INTO inventory(ItemName, ItemCount) VALUES('%s', %d);", itemName, count));
         }
     }
 
@@ -149,7 +149,7 @@ public class DatabaseAdapter implements AutoCloseable {
      */
     public void deleteInventoryItem(String itemName) throws SQLException {
         try (Statement s = databaseConnection.createStatement()) {
-            s.executeUpdate(String.format("DELETE FROM inventory where itemName = '%s';", itemName));
+            s.executeUpdate(String.format("delete from inventory where `ItemName` = '%s';", itemName));
         }
     }
 
