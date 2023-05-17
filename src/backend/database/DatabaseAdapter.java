@@ -88,8 +88,8 @@ public class DatabaseAdapter implements AutoCloseable {
      */
     public ArrayList<InventoryItem> getItems() throws SQLException {
         ArrayList<InventoryItem> items = new ArrayList<>();
-        try (Statement s = databaseConnection.createStatement()) {
-            ResultSet itemEntries = s.executeQuery("select * from inventory");
+        try (Statement s = databaseConnection.createStatement();
+             ResultSet itemEntries = s.executeQuery("select * from inventory")) {
 
             while (itemEntries.next()) {
                 String itemName = itemEntries.getString("itemName");
@@ -110,8 +110,8 @@ public class DatabaseAdapter implements AutoCloseable {
      * error with the query
      */
     public int getInventoryAmount(String item) {
-        try (Statement s = databaseConnection.createStatement()) {
-            ResultSet itemResult = s.executeQuery(String.format("SELECT * FROM inventory WHERE (`itemName` = '%s');", item));
+        try (Statement s = databaseConnection.createStatement();
+             ResultSet itemResult = s.executeQuery(String.format("SELECT * FROM inventory WHERE (`itemName` = '%s');", item))) {
             if (!itemResult.next()) {
                 return -1;
             } else {
@@ -178,6 +178,17 @@ public class DatabaseAdapter implements AutoCloseable {
      */
     public ArrayList<Reservation> getReservations() throws SQLException {
         ArrayList<Reservation> reservations = new ArrayList<>();
+        try (Statement s = databaseConnection.createStatement();
+             ResultSet reservationEntries = s.executeQuery("select * from reservations")) {
+
+            while (reservationEntries.next()) {
+                int reservationID = reservationEntries.getInt("reservationID");
+                int partySize = reservationEntries.getInt("partySize");
+                int tableNumber = reservationEntries.getInt("tableNumber");
+                String customerName = reservationEntries.getString("customerName");
+                String phoneNumber = reservationEntries.getString("phoneNumber");
+            }
+        }
         return reservations;
     }
 
