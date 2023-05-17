@@ -3,8 +3,11 @@ package backendTest;
 import backend.database.DatabaseAdapter;
 import org.junit.jupiter.api.Test;
 
+import javax.xml.crypto.Data;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestDatabaseAdapter {
@@ -49,7 +52,15 @@ class TestDatabaseAdapter {
     void testAddDuplicateItem() throws FileNotFoundException, SQLException {
         DatabaseAdapter db = new DatabaseAdapter(configPath);
         db.addInventoryItem("Test Item", 5);
-        assertThrows(SQLException.class, () -> db.addInventoryItem("Test Item", 6));
+        assertThrows(SQLIntegrityConstraintViolationException.class, () -> db.addInventoryItem("Test Item", 6));
+        db.deleteInventoryItem("Test Item");
+    }
+
+    @Test
+    void testGetInventoryAmount() throws FileNotFoundException, SQLException {
+        DatabaseAdapter db = new DatabaseAdapter(configPath);
+        db.addInventoryItem("Test Item", 5);
+        assertEquals(5, db.getInventoryAmount("Test Item"));
         db.deleteInventoryItem("Test Item");
     }
 }

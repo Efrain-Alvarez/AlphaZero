@@ -1,15 +1,13 @@
 package backend.database;
 
 import backend.config.ConfigFile;
-import jdk.jshell.spi.ExecutionControl;
 
 import java.io.FileNotFoundException;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 /**
  * A class intended to interact with JDBC. This acts as a
@@ -79,26 +77,77 @@ public class DatabaseAdapter {
     }
 
     /**
+     * Retrieve all items and their quantities from this database and return as a list of <code>InventoryItems</code>.
+     * If the inventory table in the database is empty, this method will return an empty ArrayList.
+     *
+     * @return an <code>ArrayList</code> of all inventory items stored on this database, or null if there was an error
+     * with the query
+     */
+    public ArrayList<InventoryItem> getItems() throws SQLException {
+        ArrayList<InventoryItem> items = new ArrayList<>();
+        try (Statement s = databaseConnection.createStatement()) {
+            ResultSet itemEntries = s.executeQuery("select * from inventory");
+
+            while (itemEntries.next()) {
+                String itemName = itemEntries.getString("itemName");
+                int itemCount = itemEntries.getInt("itemCount");
+                items.add(new InventoryItem(itemName, itemCount));
+            }
+        }
+        return items;
+    }
+
+    /**
      * Retrieve inventory amount for a single item. Note that this method does not specify for individual units
      * or cases. <b>It is up to the caller to determine that and display to the user whether they want to store number
      * of cases or number of units in the datastore.</b>
      *
      * @param item the item name to query for
-     * @return the amount of items last specified in the system stored in the database
-     * @throws SQLException if there was a problem with the database results
+     * @return the amount of items last specified in the system stored in the database or -1 if there was an
+     * error with the query
      */
-    public int getInventoryAmount(String item) throws SQLException {
-        return 0;
+    public int getInventoryAmount(String item) {
+        try (Statement s = databaseConnection.createStatement()) {
+            ResultSet itemResult = s.executeQuery(String.format("SELECT * FROM inventory WHERE (`itemName` = '%s');", item));
+            if (!itemResult.next()) {
+                return -1;
+            } else {
+                return itemResult.getInt("itemCount");
+            }
+
+        } catch (Exception e) {
+            logger.log(Level.WARNING, e.getMessage());
+            return -1;
+        }
     }
 
     /**
-     * Retrieve all items and their quantities from this database and return as a map.
+     * Add a new item and count to the database. Note that the
+     * database is configured to reject the addition of new items
+     * that already have entries in the inventory table.
      *
-     * @return an <code>ArrayList</code> of all inventory items stored on this database
-     * @throws ExecutionControl.NotImplementedException
+     * @param itemName the name of the item to add to the inventory
+     * @param count    the initial count
+     * @throws SQLException if there was a problem with the
      */
-    public ArrayList<InventoryItem> getItems() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("Query for inventory items not yet implemented");
+    public void addInventoryItem(String itemName, int count) throws SQLException {
+        try (Statement s = databaseConnection.createStatement()) {
+            s.executeUpdate(String.format("INSERT INTO inventory(itemName, itemCount) VALUES('%s', %d);", itemName, count));
+        }
+    }
+
+    public void updateInventoryItem(String itemName, int newCount) {
+
+    }
+
+    /**
+     * Delete a specific item from the inventory table.
+     * @param itemName the name of the item to delete
+     */
+    public void deleteInventoryItem(String itemName) throws SQLException {
+        try (Statement s = databaseConnection.createStatement()) {
+            s.executeUpdate(String.format("DELETE FROM inventory where itemName = '%s';", itemName));
+        }
     }
 
     /**
