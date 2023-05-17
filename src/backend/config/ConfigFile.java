@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOError;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /*
@@ -14,8 +16,8 @@ import java.util.regex.Pattern;
  * key=value
  * keywithspace = valuewithspace
  */
-
 public class ConfigFile {
+    private static final Logger logger = Logger.getLogger(ConfigFile.class.getName());
     private final ArrayList<ConfigSection> sections;
 
     /**
@@ -26,6 +28,8 @@ public class ConfigFile {
      * @throws IOError if an option in the config file could not be read
      */
     public ConfigFile(String filePath) throws FileNotFoundException, IOError {
+        logger.log(Level.FINER, "Trying to create a ConfigFile object...");
+        logger.log(Level.FINER, "File path: " + filePath);
         final File configFile = new File(filePath);
         sections = new ArrayList<>();
 
@@ -63,6 +67,8 @@ public class ConfigFile {
                 }
             }
         }
+
+        logger.log(Level.FINE, "Number of options parsed: " + size());
     }
 
     /**
