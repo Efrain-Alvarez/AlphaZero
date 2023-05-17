@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ConfigFileTest {
+class TestConfigFile {
     @Test
     public void testNormalRead() {
         try {
