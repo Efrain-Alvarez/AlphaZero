@@ -18,6 +18,7 @@ class TestDatabaseAdapter {
     void testDatabaseConnection() throws Exception {
         try (DatabaseAdapter db = new DatabaseAdapter(configPath)) {
         }
+        assertThrows(FileNotFoundException.class, () -> new DatabaseAdapter((".non/existent/path")));
     }
 
     // Make sure getInventory can run without error normally
