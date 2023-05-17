@@ -22,6 +22,7 @@ public class Reservation {
      * @param name        name of customer making reservation under
      * @param phoneNumber phone number to contact customer with
      * @param date        date to attach to reservation
+     * @param partySize   number of people included in this reservation
      */
     public Reservation(String name, String phoneNumber, LocalDateTime date, int partySize) {
         this.name = name;
