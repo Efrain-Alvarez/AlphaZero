@@ -20,6 +20,9 @@ public class ConfigFile {
     private static final Logger logger = Logger.getLogger(ConfigFile.class.getName());
     private final ArrayList<ConfigSection> sections;
 
+    // Logging messages
+    private static final String CONFIG_OPT_MSG = "Config file is invalid, no config option found";
+
     /**
      * Parse an ini-style file for its options
      *
@@ -61,7 +64,7 @@ public class ConfigFile {
                 } else if (configOption.matcher(line).matches()) {
                     // file is in wrong format
                     if (currentSection == null) {
-                        throw new RuntimeException("Config file is invalid, no config section found");
+                        throw new RuntimeException(CONFIG_OPT_MSG);
                     }
                     currentSection.parseOpt(line);
                 }
