@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOError;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /*
@@ -14,18 +16,23 @@ import java.util.regex.Pattern;
  * key=value
  * keywithspace = valuewithspace
  */
-
 public class ConfigFile {
+    private static final Logger logger = Logger.getLogger(ConfigFile.class.getName());
     private final ArrayList<ConfigSection> sections;
+
+    // Logging messages
+    private static final String CONFIG_OPT_MSG = "Config file is invalid, no config option found";
 
     /**
      * Parse an ini-style file for its options
      *
      * @param filePath absolute path of configuration file on system
      * @throws FileNotFoundException if path points to a file that does not exist
-     * @throws IOError if an option in the config file could not be read
+     * @throws IOError               if an option in the config file could not be read
      */
     public ConfigFile(String filePath) throws FileNotFoundException, IOError {
+        logger.log(Level.FINER, "Trying to create a ConfigFile object...");
+        logger.log(Level.FINER, "File path: " + filePath);
         final File configFile = new File(filePath);
         sections = new ArrayList<>();
 
@@ -57,12 +64,14 @@ public class ConfigFile {
                 } else if (configOption.matcher(line).matches()) {
                     // file is in wrong format
                     if (currentSection == null) {
-                        throw new RuntimeException("Config file is invalid, no config section found");
+                        throw new RuntimeException(CONFIG_OPT_MSG);
                     }
                     currentSection.parseOpt(line);
                 }
             }
         }
+
+        logger.log(Level.FINE, "Number of options parsed: " + size());
     }
 
     /**
@@ -93,7 +102,7 @@ public class ConfigFile {
                         return opt.value();
                     }
                 }
-                throw new IllegalArgumentException("Unable to find config option: " + section + " in file");
+                throw new IllegalArgumentException("Unable to find config option: " + option + " in file");
             }
         }
         throw new IllegalArgumentException("Unable to find config section: " + section + " in file");

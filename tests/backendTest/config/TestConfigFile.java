@@ -1,4 +1,4 @@
-package backendTest;
+package backendTest.config;
 
 import backend.config.ConfigFile;
 import org.junit.jupiter.api.Test;
@@ -7,12 +7,11 @@ import java.io.FileNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ConfigFileTest {
+class TestConfigFile {
     @Test
     public void testNormalRead() {
         try {
             ConfigFile f = new ConfigFile("/home/etorres/Programming/cs370/Project/repo/config.ini");
-            f.dumpToStdout();
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         }
