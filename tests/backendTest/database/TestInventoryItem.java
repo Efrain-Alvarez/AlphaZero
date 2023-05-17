@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestInventoryItem {
-
     @Test
     void testGetItemName() {
         InventoryItem i = new InventoryItem("CAPITAL NAME", 0);
@@ -33,5 +32,12 @@ class TestInventoryItem {
     @Test
     void testRejectsNegativeAmount() {
         assertThrows(RuntimeException.class, () -> new InventoryItem("Item", -1));
+    }
+
+    @Test
+    void testDefaultConstructor() {
+        InventoryItem testItem = new InventoryItem();
+        assertEquals("unknown", testItem.getItemName());
+        assertEquals(0, testItem.getItemCount());
     }
 }

@@ -3,8 +3,6 @@ package backend.database;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-
 /**
  * This class is a representation of a singular reservation on the system.
  * It is intended as a helper for the program frontend to store and retrieve reservation
@@ -15,6 +13,21 @@ public class Reservation {
     private final String name, phoneNumber;
     private final LocalDateTime date;
     private final int partySize;
+    private final int tableNumber;
+
+    /**
+     * Default constructor for <code>Reservation</code>.
+     */
+    public Reservation() {
+        this.name = "unknown";
+        this.phoneNumber = "unknown";
+        this.date = null;
+        this.partySize = 0;
+        this.tableNumber = -1;
+
+        preorderItems = new ArrayList<>();
+        specialRequests = new ArrayList<>();
+    }
 
     /**
      * Create a single reservation entry for a single party.
@@ -24,36 +37,15 @@ public class Reservation {
      * @param date        date to attach to reservation
      * @param partySize   number of people included in this reservation
      */
-    public Reservation(String name, String phoneNumber, LocalDateTime date, int partySize) {
+    public Reservation(String name, String phoneNumber, LocalDateTime date, int partySize, int tableNumber) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.date = date;
         this.partySize = partySize;
+        this.tableNumber = tableNumber;
 
         preorderItems = new ArrayList<>();
         specialRequests = new ArrayList<>();
-    }
-
-    /**
-     * Add a menu item to this reservation's pre-order list.
-     * This is a helper for the functionality for a customer pre-ordering a menu item to aid with
-     * inventory purposes before the actual reservation date.
-     *
-     * @param item the menu item to order
-     */
-    public void addPreOrderItem(String item) {
-        preorderItems.add(item);
-    }
-
-    /**
-     * Add a special request such as an allergy, menu item request, etc.
-     * This method does not specify any formatting, so that is left up to the
-     * caller i.e. the GUI.
-     *
-     * @param requestMessage the request message to add to this reservation
-     */
-    public void addSpecialRequest(String requestMessage) {
-        specialRequests.add(requestMessage);
     }
 
     /**
@@ -68,13 +60,6 @@ public class Reservation {
      */
     public String getPhoneNumber() {
         return phoneNumber;
-    }
-
-    /**
-     * @return string representation of date attached to this reservation
-     */
-    public String getDateString() {
-        return date.format(ISO_LOCAL_DATE_TIME);
     }
 
     /**
@@ -103,5 +88,31 @@ public class Reservation {
      */
     public int getPartySize() {
         return partySize;
+    }
+
+    public int getTableNumber() {
+        return tableNumber;
+    }
+
+    /**
+     * Add a menu item to this reservation's pre-order list.
+     * This is a helper for the functionality for a customer pre-ordering a menu item to aid with
+     * inventory purposes before the actual reservation date.
+     *
+     * @param item the menu item to order
+     */
+    public void addPreOrderItem(String item) {
+        preorderItems.add(item);
+    }
+
+    /**
+     * Add a special request such as an allergy, menu item request, etc.
+     * This method does not specify any formatting, so that is left up to the
+     * caller i.e. the GUI.
+     *
+     * @param requestMessage the request message to add to this reservation
+     */
+    public void addSpecialRequest(String requestMessage) {
+        specialRequests.add(requestMessage);
     }
 }
