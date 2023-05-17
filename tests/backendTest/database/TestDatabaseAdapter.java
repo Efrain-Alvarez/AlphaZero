@@ -29,14 +29,14 @@ class TestDatabaseAdapter {
     }
 
     @Test
-    void testInvalidPath() throws Exception {
+    void testInvalidPath() {
         assertThrows(FileNotFoundException.class, () -> new DatabaseAdapter((".non/existent/path")));
     }
 
     // Make sure getInventory can run without error normally
     @Test
     void testGetInventoryItems() throws Exception {
-        var items = db.getItems();
+        db.getItems();
     }
 
     @Test
@@ -55,7 +55,7 @@ class TestDatabaseAdapter {
 
     @Test
     void testGetReservations() throws Exception {
-        var reservations = db.getReservations();
+        db.getReservations();
     }
 
     @Test
@@ -66,7 +66,7 @@ class TestDatabaseAdapter {
     }
 
     @Test
-    void testDate() throws Exception {
+    void testDate() {
         // parse valid date and time
         assertDoesNotThrow(() -> db.parseDateAndTime("2023-05-17", "14", "00"));
         //assertDoesNotThrow(() -> db.parseDateAndTime("05/17/23", "14", "00"));

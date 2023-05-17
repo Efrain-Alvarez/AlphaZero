@@ -8,7 +8,7 @@ public class ConfigSection {
     private final String name; // section name
 
     public ConfigSection(String name) {
-        opts = new ArrayList<ConfigOption>();
+        opts = new ArrayList<>();
         this.name = name;
     }
 
@@ -19,7 +19,7 @@ public class ConfigSection {
      */
     public void parseOpt(String line) {
         try {
-            String[] parts = line.split("\s*=\s*");
+            String[] parts = line.split(" *= *");
             opts.add(new ConfigOption(parts[0], parts[1]));
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new IOError(e);

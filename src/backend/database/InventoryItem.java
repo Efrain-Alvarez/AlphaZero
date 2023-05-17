@@ -4,7 +4,7 @@ package backend.database;
  * Representation of a single list item on an inventory.
  */
 public class InventoryItem {
-    private String itemName;
+    private final String itemName;
     private int amount;
 
     /**

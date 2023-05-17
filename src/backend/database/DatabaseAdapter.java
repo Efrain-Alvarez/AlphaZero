@@ -209,7 +209,7 @@ public class DatabaseAdapter implements AutoCloseable {
      */
     public ArrayList<Reservation> getReservationsForTable(int tableNumber) throws SQLException {
         try (Statement s = databaseConnection.createStatement();
-             ResultSet reservationEntries = s.executeQuery(String.format("select * from reservations where `TableNumber` = %d", tableNumber));) {
+             ResultSet reservationEntries = s.executeQuery(String.format("select * from reservations where `TableNumber` = %d", tableNumber))) {
             ArrayList<Reservation> reservations = new ArrayList<>();
 
             while (reservationEntries.next()) {
