@@ -4,7 +4,7 @@ import backend.database.Reservation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class ReservationTest {
+class TestReservation {
     @Test
     void testDefaultConstructor() {
         Reservation r = new Reservation();
