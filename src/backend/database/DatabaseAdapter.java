@@ -38,9 +38,7 @@ import java.util.logging.Logger;
  * Please note that each callable method that interacts with the database can possibly throw <code>SQLException</code>
  * so the caller must keep this in mind when instantiating this class.
  */
-public class DatabaseAdapter {
-    private String uri, dbUser, dbPass;
-    private static final String dbClassname = "com.mysql.cj.jdbc.Driver";
+public class DatabaseAdapter implements AutoCloseable {
     private static final Logger logger = Logger.getLogger(DatabaseAdapter.class.getName());
     private final ConfigFile cf;
     private final Properties credentials;
@@ -176,5 +174,22 @@ public class DatabaseAdapter {
     public ArrayList<Reservation> getReservations() throws SQLException {
         ArrayList<Reservation> reservations = new ArrayList<>();
         return reservations;
+    }
+
+    /**
+     * Modify a selected reservation.
+     *
+     * @param r the reservation to modify
+     */
+    public void changeReservation(Reservation r) {
+
+    }
+
+    /**
+     * Close any connections and other resources that have been opened during the duration of this object.
+     */
+    @Override
+    public void close() throws Exception {
+        databaseConnection.close();
     }
 }
