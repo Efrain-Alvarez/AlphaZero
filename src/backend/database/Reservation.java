@@ -104,17 +104,4 @@ public class Reservation {
     public int getPartySize() {
         return partySize;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Reservation that = (Reservation) o;
-        return partySize == that.partySize && Objects.equals(name, that.name) && Objects.equals(phoneNumber, that.phoneNumber);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, phoneNumber, partySize);
-    }
 }
