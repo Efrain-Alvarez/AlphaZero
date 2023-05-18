@@ -155,6 +155,37 @@ public class DatabaseAdapter implements AutoCloseable {
         }
     }
 
+    private Reservation constructReservation(ResultSet reservationInfo) throws SQLException {
+        Reservation newReservation = null;
+
+        int reservationID = reservationInfo.getInt("ReservationID");
+        int partySize = reservationInfo.getInt("PartySize");
+        int tableNumber = reservationInfo.getInt("TableNumber");
+        String customerName = reservationInfo.getString("CustomerName");
+        String phoneNumber = reservationInfo.getString("PhoneNumber");
+        LocalDateTime dateTime = reservationInfo.getTimestamp("DateTime").toLocalDateTime();
+
+        newReservation = new Reservation(customerName, phoneNumber, dateTime, partySize, tableNumber);
+
+        // Get item preorders
+        try (Statement t = databaseConnection.createStatement();
+             ResultSet preorderItems = t.executeQuery(String.format("select * from preorderItems where `ReservationID` = %d", reservationID))) {
+            while (preorderItems.next()) {
+                newReservation.addPreOrderItem(preorderItems.getString("Item"));
+            }
+        }
+
+        // Get special requests
+        try (Statement u = databaseConnection.createStatement();
+             ResultSet specialRequests = u.executeQuery(String.format("select * from specialRequests where `ReservationID` = %d", reservationID))) {
+            while (specialRequests.next()) {
+                newReservation.addSpecialRequest(specialRequests.getString("Request"));
+            }
+        }
+
+        return newReservation;
+    }
+
     /**
      * Query the database and retrieve a list of any reservations for all tables for the entire day.<br>
      * Please refer to <code>Reservation</code> to learn more about what is return by this method.
@@ -165,39 +196,26 @@ public class DatabaseAdapter implements AutoCloseable {
     public ArrayList<Reservation> getReservations() throws SQLException {
         ArrayList<Reservation> reservations = new ArrayList<>();
         try (Statement s = databaseConnection.createStatement();
-             ResultSet reservationEntries = s.executeQuery("select * from reservations")) {
-
+             ResultSet reservationEntries = s.executeQuery("select * from reservations");
+        ) {
             while (reservationEntries.next()) {
-                int reservationID = reservationEntries.getInt("ReservationID");
-                int partySize = reservationEntries.getInt("PartySize");
-                int tableNumber = reservationEntries.getInt("TableNumber");
-                String customerName = reservationEntries.getString("CustomerName");
-                String phoneNumber = reservationEntries.getString("PhoneNumber");
-                LocalDateTime dateTime = reservationEntries.getTimestamp("DateTime").toLocalDateTime();
-
-                Reservation curr = new Reservation(customerName, phoneNumber, dateTime, partySize, tableNumber);
-
-                // Get item preorders
-                try (Statement t = databaseConnection.createStatement();
-                     ResultSet preorderItems = t.executeQuery(String.format("select * from preorderItems where `ReservationID` = %d", reservationID))) {
-                    while (preorderItems.next()) {
-                        curr.addPreOrderItem(preorderItems.getString("Item"));
-                    }
-                }
-
-                // Get special requests
-                try (Statement u = databaseConnection.createStatement();
-                     ResultSet specialRequests = u.executeQuery(String.format("select * from specialRequests where `ReservationID` = %d", reservationID))) {
-                    while (specialRequests.next()) {
-                        curr.addSpecialRequest(specialRequests.getString("Request"));
-                    }
-                }
-
-                reservations.add(curr);
-
+                reservations.add(constructReservation(reservationEntries));
             }
         }
         return reservations;
+    }
+
+    /**
+     * Retrieve a single reservation by name.
+     *
+     * @return a <code>Reservation</code> whose name matches the query
+     * @throws SQLException if there was an error querying the database
+     */
+    public Reservation getReservationByName(String query) throws SQLException {
+        try (Statement s = databaseConnection.createStatement();
+             ResultSet reservationData = s.executeQuery(String.format("select * from reservations where `CustomerName` = %s", query))) {
+            return constructReservation(reservationData);
+        }
     }
 
     /**
@@ -213,28 +231,9 @@ public class DatabaseAdapter implements AutoCloseable {
             ArrayList<Reservation> reservations = new ArrayList<>();
 
             while (reservationEntries.next()) {
-                int reservationID = reservationEntries.getInt("ReservationID");
-                int partySize = reservationEntries.getInt("PartySize");
-                String customerName = reservationEntries.getString("CustomerName");
-                String phoneNumber = reservationEntries.getString("PhoneNumber");
-                LocalDateTime dateTime = reservationEntries.getTimestamp("DateTime").toLocalDateTime();
-
-                Reservation curr = new Reservation(customerName, phoneNumber, dateTime, partySize, tableNumber);
-
-                // Get item preorders and special requests
-                try (ResultSet preorderItems = s.executeQuery(String.format("select * from preorderItems where `ReservationID` = %d", reservationID));
-                     ResultSet specialRequests = s.executeQuery(String.format("select * from specialRequests where `ReservationID` = %d", reservationID))) {
-                    while (preorderItems.next()) {
-                        curr.addPreOrderItem(preorderItems.getString("Item"));
-                    }
-                    while (specialRequests.next()) {
-                        curr.addSpecialRequest(specialRequests.getString("Request"));
-                    }
-                }
-
-                reservations.add(curr);
-
+                reservations.add(constructReservation(reservationEntries));
             }
+
             return reservations;
         }
     }
