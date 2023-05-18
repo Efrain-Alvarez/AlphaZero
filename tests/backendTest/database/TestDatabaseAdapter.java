@@ -59,10 +59,14 @@ class TestDatabaseAdapter {
     }
 
     @Test
-    void testAddDeleteReservation() throws Exception {
-        Reservation r = new Reservation("test name", "0000000000", LocalDateTime.now(), 1, 1);
-        db.addReservation(r);
-        db.deleteReservationByName(r.getName());
+    void testReservationReadWrite() throws Exception {
+        // Initialize test data
+        // testObject will be our reference
+        Reservation testObject = new Reservation("test name", "0000000000", LocalDateTime.now(), 1, 1);
+        db.addReservation(testObject);
+        Reservation readObject = db.getReservationByName("test name");
+        db.deleteReservationByName(testObject.getName());
+        assertEquals(testObject, readObject);
     }
 
     @Test
