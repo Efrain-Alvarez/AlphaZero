@@ -64,7 +64,7 @@ public class DatabaseAdapter implements AutoCloseable {
      * @param configPath the path to the program that has the database credentials
      * @throws FileNotFoundException if ConfigPath references a non-existent location for a config file
      * @throws RuntimeException      if an option on the config file couldn't be read
-     * @throws SQLException if there was a problem establishing a connection to the SQL database
+     * @throws SQLException          if there was a problem establishing a connection to the SQL database
      */
     public DatabaseAdapter(String configPath) throws FileNotFoundException, SQLException, RuntimeException {
         ConfigFile cf = new ConfigFile(configPath);
@@ -147,6 +147,7 @@ public class DatabaseAdapter implements AutoCloseable {
 
     /**
      * Delete a specific item from the inventory table.
+     *
      * @param itemName the name of the item to delete
      */
     public void deleteInventoryItem(String itemName) throws SQLException {
