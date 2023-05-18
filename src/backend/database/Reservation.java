@@ -2,6 +2,7 @@ package backend.database;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * This class is a representation of a singular reservation on the system.
@@ -129,5 +130,18 @@ public class Reservation {
      */
     public void addSpecialRequest(String requestMessage) {
         specialRequests.add(requestMessage);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reservation that = (Reservation) o;
+        return partySize == that.partySize && tableNumber == that.tableNumber && Objects.equals(preorderItems, that.preorderItems) && Objects.equals(specialRequests, that.specialRequests) && Objects.equals(name, that.name) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(date, that.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(preorderItems, specialRequests, name, phoneNumber, date, partySize, tableNumber);
     }
 }
