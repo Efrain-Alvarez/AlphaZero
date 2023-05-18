@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Vector;
 
 
 public class Dashboard extends JFrame implements AutoCloseable {
@@ -247,14 +246,22 @@ public class Dashboard extends JFrame implements AutoCloseable {
         }
 
         public void refreshInventoryList(ArrayList<InventoryItem> inventoryList) {
-            inventoryTable = new JTable(new InventoryTableModel());
+            inventoryTable = new JTable(new InventoryTableModel(inventoryList));
             this.revalidate();
             this.repaint();
         }
     }
     class InventoryTableModel extends AbstractTableModel {
         private String[] columnNames = {"Item", "Data"};
-        private Object[][] data = ...//same as before...
+        private Object[] data = {};
+
+        public InventoryTableModel(ArrayList<InventoryItem> items) {
+            ArrayList<String> tmp = new ArrayList<>();
+            for (InventoryItem item: items) {
+                tmp.add(String.format("Item: %s %d", item.getItemName(), item.getItemCount()));
+            }
+            data = tmp.toArray();
+        }
 
         public int getColumnCount() {
             return columnNames.length;
@@ -269,12 +276,13 @@ public class Dashboard extends JFrame implements AutoCloseable {
         }
 
         public Object getValueAt(int row, int col) {
-            return data[row][col];
+            return data[row];
         }
 
         public Class getColumnClass(int c) {
             return getValueAt(0, c).getClass();
         }
+    }
 
     @Override
     public void close() throws Exception {
