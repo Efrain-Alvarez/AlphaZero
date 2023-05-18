@@ -152,7 +152,8 @@ private class LoginPanel extends JPanel {
         if (username.equals("admin") && password.equals("password")) {
             // Open the new file
             File file = new File("src/userinterface/Test.txt");
-            try {
+            // try (DatabaseAdapter db = new DatabaseAdapter("config.ini")) {
+                try{
                 Desktop.getDesktop().open(file);
                 JOptionPane.showMessageDialog(this, "Login successful! File opened.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException e) {
@@ -167,7 +168,7 @@ private class LoginPanel extends JPanel {
 private class ReservationPanel extends JPanel {
     private JComboBox<String> reservationComboBox;
     private JTextField nameTextField;
-    private JTextField emailTextField;
+    private JTextField phoneTextField;
     private JButton submitButton;
 
     public ReservationPanel() {
@@ -184,16 +185,16 @@ private class ReservationPanel extends JPanel {
         JLabel nameLabel = new JLabel("Name:");
         nameTextField = new JTextField(20);
 
-        JLabel emailLabel = new JLabel("Email:");
-        emailTextField = new JTextField(20);
+        JLabel phoneLabel = new JLabel("Phone Number:");
+        phoneTextField = new JTextField(20);
 
         submitButton = new JButton("Submit");
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String selectedReservation = (String) reservationComboBox.getSelectedItem();
                 String name = nameTextField.getText();
-                String email = emailTextField.getText();
-                String message = "Selected Reservation: " + selectedReservation + "\nName: " + name + "\nEmail: " + email;
+                String email = phoneTextField.getText();
+                String message = "Selected Reservation: " + selectedReservation + "\nName: " + name + "\nPhone Number: " + email;
                 JOptionPane.showMessageDialog(ReservationPanel.this, message);
             }
         });
@@ -201,8 +202,8 @@ private class ReservationPanel extends JPanel {
         reservationFormPanel.add(reservationComboBox);
         reservationFormPanel.add(nameLabel);
         reservationFormPanel.add(nameTextField);
-        reservationFormPanel.add(emailLabel);
-        reservationFormPanel.add(emailTextField);
+        reservationFormPanel.add(phoneLabel);
+        reservationFormPanel.add(phoneTextField);
         reservationFormPanel.add(new JLabel());
         reservationFormPanel.add(submitButton);
 
