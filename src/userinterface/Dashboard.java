@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 public class Dashboard extends JFrame {
 
     public static void main(String[] args) {
@@ -155,6 +156,8 @@ private class LoginPanel extends JPanel {
 }
 private class ReservationPanel extends JPanel {
     private JComboBox<String> reservationComboBox;
+    private JTextField nameTextField;
+    private JTextField emailTextField;
     private JButton submitButton;
 
     public ReservationPanel() {
@@ -165,23 +168,35 @@ private class ReservationPanel extends JPanel {
         reservationFormPanel.setLayout(new FlowLayout());
 
         JLabel reservationLabel = new JLabel("Select Reservation:");
-        String[] reservationOptions = {"Option 1", "Option 2", "Option 3"};
+        String[] reservationOptions = {"Date: 5/19/2022 @2:15 pm", "Date: 5/19/2022 @3:00 pm", "Date: 5/19/2022 @4:30 pm"};
         reservationComboBox = new JComboBox<>(reservationOptions);
+
+        JLabel nameLabel = new JLabel("Name:");
+        nameTextField = new JTextField(20);
+
+        JLabel emailLabel = new JLabel("Email:");
+        emailTextField = new JTextField(20);
 
         submitButton = new JButton("Submit");
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String selectedReservation = (String) reservationComboBox.getSelectedItem();
-                JOptionPane.showMessageDialog(ReservationPanel.this, "Selected Reservation: " + selectedReservation);
+                String name = nameTextField.getText();
+                String email = emailTextField.getText();
+                String message = "Selected Reservation: " + selectedReservation + "\nName: " + name + "\nEmail: " + email;
+                JOptionPane.showMessageDialog(ReservationPanel.this, message);
             }
         });
-
         reservationFormPanel.add(reservationLabel);
         reservationFormPanel.add(reservationComboBox);
+        reservationFormPanel.add(nameLabel);
+        reservationFormPanel.add(nameTextField);
+        reservationFormPanel.add(emailLabel);
+        reservationFormPanel.add(emailTextField);
+        reservationFormPanel.add(new JLabel());
         reservationFormPanel.add(submitButton);
 
         add(reservationFormPanel, BorderLayout.CENTER);
     }
 }
 }
-
