@@ -214,7 +214,8 @@ public class DatabaseAdapter implements AutoCloseable {
      */
     public Reservation getReservationByName(String query) throws SQLException {
         try (Statement s = databaseConnection.createStatement();
-             ResultSet reservationData = s.executeQuery(String.format("select * from reservations where `CustomerName` = %s", query))) {
+             ResultSet reservationData = s.executeQuery(String.format("select * from reservations where `CustomerName` = '%s'", query))) {
+            reservationData.next();
             return constructReservation(reservationData);
         }
     }
