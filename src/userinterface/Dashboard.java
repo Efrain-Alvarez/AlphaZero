@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Dashboard extends JFrame {
@@ -165,18 +167,21 @@ private class LoginPanel extends JPanel {
     }
 }
 
-private class ReservationPanel extends JPanel {
+public class ReservationPanel extends JPanel {
     private JComboBox<String> reservationComboBox;
     private JTextField nameTextField;
     private JTextField phoneTextField;
     private JButton submitButton;
+    private JTextArea reservationsTextArea; // Added JTextArea for displaying reservations
+
+    private List<String> reservations; // List to store reservations
 
     public ReservationPanel() {
         setLayout(new BorderLayout());
 
         JPanel reservationFormPanel = new JPanel();
         reservationFormPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
-        reservationFormPanel.setLayout(new FlowLayout());
+        reservationFormPanel.setLayout(new GridLayout(4, 2, 10, 10));
 
         JLabel reservationLabel = new JLabel("Select Reservation:");
         String[] reservationOptions = {"Date: 5/19/2022 @2:15 pm", "Date: 5/19/2022 @3:00 pm", "Date: 5/19/2022 @4:30 pm"};
@@ -193,11 +198,22 @@ private class ReservationPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String selectedReservation = (String) reservationComboBox.getSelectedItem();
                 String name = nameTextField.getText();
-                String email = phoneTextField.getText();
-                String message = "Selected Reservation: " + selectedReservation + "\nName: " + name + "\nPhone Number: " + email;
-                JOptionPane.showMessageDialog(ReservationPanel.this, message);
+                String phoneNumber = phoneTextField.getText();
+
+                // Add the reservation to the list
+                String reservation = "Reservation: " + selectedReservation + ", Name: " + name + ", Phone Number: " + phoneNumber;
+                reservations.add(reservation);
+
+                // Update the reservations text area
+                updateReservationsTextArea();
+
+                JOptionPane.showMessageDialog(ReservationPanel.this, "Reservation submitted successfully.");
             }
         });
+
+        reservationsTextArea = new JTextArea();
+        JScrollPane scrollPane = new JScrollPane(reservationsTextArea);
+
         reservationFormPanel.add(reservationLabel);
         reservationFormPanel.add(reservationComboBox);
         reservationFormPanel.add(nameLabel);
@@ -207,7 +223,19 @@ private class ReservationPanel extends JPanel {
         reservationFormPanel.add(new JLabel());
         reservationFormPanel.add(submitButton);
 
-        add(reservationFormPanel, BorderLayout.CENTER);
+        add(reservationFormPanel, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
+
+        reservations = new ArrayList<>(); // Initialize the reservations list
+        updateReservationsTextArea(); // Update the reservations text area initially
+    }
+
+    private void updateReservationsTextArea() {
+        StringBuilder sb = new StringBuilder();
+        for (String reservation : reservations) {
+            sb.append(reservation).append("\n");
+        }
+        reservationsTextArea.setText(sb.toString());
     }
 }
 }
