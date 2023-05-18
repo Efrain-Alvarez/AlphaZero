@@ -2,6 +2,7 @@ package backend.database;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * This class is a representation of a singular reservation on the system.
@@ -20,7 +21,7 @@ public class Reservation {
      */
     public Reservation() {
         this.name = "unknown";
-        this.phoneNumber = "unknown";
+        this.phoneNumber = "0000000000";
         this.date = null;
         this.partySize = 0;
         this.tableNumber = -1;
@@ -33,7 +34,7 @@ public class Reservation {
      * Create a single reservation entry for a single party.
      *
      * @param name        name of customer making reservation under
-     * @param phoneNumber phone number to contact customer with
+     * @param phoneNumber 10-digit phone number to contact customer with
      * @param date        date to attach to reservation
      * @param partySize   number of people included in this reservation
      */
@@ -43,6 +44,11 @@ public class Reservation {
         this.date = date;
         this.partySize = partySize;
         this.tableNumber = tableNumber;
+
+        // must be a 10 digit phone number
+        if (phoneNumber.length() != 10) {
+            throw new RuntimeException("Phone number " + phoneNumber + " rejected, invalid format");
+        }
 
         preorderItems = new ArrayList<>();
         specialRequests = new ArrayList<>();
@@ -60,6 +66,16 @@ public class Reservation {
      */
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    /**
+     * @return the phone number of this reservation but formatted as (xxx) xxx-xxxx
+     */
+    public String getPhoneNumberFormatted() {
+        String block1 = phoneNumber.substring(0, 3);
+        String block2 = phoneNumber.substring(3, 6);
+        String block3 = phoneNumber.substring(6, 10);
+        return String.format("(%s) %s-%s", block1, block2, block3);
     }
 
     /**
@@ -114,5 +130,18 @@ public class Reservation {
      */
     public void addSpecialRequest(String requestMessage) {
         specialRequests.add(requestMessage);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reservation that = (Reservation) o;
+        return partySize == that.partySize && tableNumber == that.tableNumber && Objects.equals(preorderItems, that.preorderItems) && Objects.equals(specialRequests, that.specialRequests) && Objects.equals(name, that.name) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(date, that.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(preorderItems, specialRequests, name, phoneNumber, date, partySize, tableNumber);
     }
 }

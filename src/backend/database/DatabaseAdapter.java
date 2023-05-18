@@ -64,7 +64,7 @@ public class DatabaseAdapter implements AutoCloseable {
      * @param configPath the path to the program that has the database credentials
      * @throws FileNotFoundException if ConfigPath references a non-existent location for a config file
      * @throws RuntimeException      if an option on the config file couldn't be read
-     * @throws SQLException if there was a problem establishing a connection to the SQL database
+     * @throws SQLException          if there was a problem establishing a connection to the SQL database
      */
     public DatabaseAdapter(String configPath) throws FileNotFoundException, SQLException, RuntimeException {
         ConfigFile cf = new ConfigFile(configPath);
@@ -147,12 +147,44 @@ public class DatabaseAdapter implements AutoCloseable {
 
     /**
      * Delete a specific item from the inventory table.
+     *
      * @param itemName the name of the item to delete
      */
     public void deleteInventoryItem(String itemName) throws SQLException {
         try (Statement s = databaseConnection.createStatement()) {
             s.executeUpdate(String.format("delete from inventory where `ItemName` = '%s';", itemName));
         }
+    }
+
+    private Reservation constructReservation(ResultSet reservationInfo) throws SQLException {
+        Reservation newReservation = null;
+
+        int reservationID = reservationInfo.getInt("ReservationID");
+        int partySize = reservationInfo.getInt("PartySize");
+        int tableNumber = reservationInfo.getInt("TableNumber");
+        String customerName = reservationInfo.getString("CustomerName");
+        String phoneNumber = reservationInfo.getString("PhoneNumber");
+        LocalDateTime dateTime = reservationInfo.getTimestamp("DateTime").toLocalDateTime();
+
+        newReservation = new Reservation(customerName, phoneNumber, dateTime, partySize, tableNumber);
+
+        // Get item preorders
+        try (Statement t = databaseConnection.createStatement();
+             ResultSet preorderItems = t.executeQuery(String.format("select * from preorderItems where `ReservationID` = %d", reservationID))) {
+            while (preorderItems.next()) {
+                newReservation.addPreOrderItem(preorderItems.getString("Item"));
+            }
+        }
+
+        // Get special requests
+        try (Statement u = databaseConnection.createStatement();
+             ResultSet specialRequests = u.executeQuery(String.format("select * from specialRequests where `ReservationID` = %d", reservationID))) {
+            while (specialRequests.next()) {
+                newReservation.addSpecialRequest(specialRequests.getString("Request"));
+            }
+        }
+
+        return newReservation;
     }
 
     /**
@@ -165,39 +197,26 @@ public class DatabaseAdapter implements AutoCloseable {
     public ArrayList<Reservation> getReservations() throws SQLException {
         ArrayList<Reservation> reservations = new ArrayList<>();
         try (Statement s = databaseConnection.createStatement();
-             ResultSet reservationEntries = s.executeQuery("select * from reservations")) {
-
+             ResultSet reservationEntries = s.executeQuery("select * from reservations");
+        ) {
             while (reservationEntries.next()) {
-                int reservationID = reservationEntries.getInt("ReservationID");
-                int partySize = reservationEntries.getInt("PartySize");
-                int tableNumber = reservationEntries.getInt("TableNumber");
-                String customerName = reservationEntries.getString("CustomerName");
-                String phoneNumber = reservationEntries.getString("PhoneNumber");
-                LocalDateTime dateTime = reservationEntries.getTimestamp("DateTime").toLocalDateTime();
-
-                Reservation curr = new Reservation(customerName, phoneNumber, dateTime, partySize, tableNumber);
-
-                // Get item preorders
-                try (Statement t = databaseConnection.createStatement();
-                     ResultSet preorderItems = t.executeQuery(String.format("select * from preorderItems where `ReservationID` = %d", reservationID))) {
-                    while (preorderItems.next()) {
-                        curr.addPreOrderItem(preorderItems.getString("Item"));
-                    }
-                }
-
-                // Get special requests
-                try (Statement u = databaseConnection.createStatement();
-                     ResultSet specialRequests = u.executeQuery(String.format("select * from specialRequests where `ReservationID` = %d", reservationID))) {
-                    while (specialRequests.next()) {
-                        curr.addSpecialRequest(specialRequests.getString("Request"));
-                    }
-                }
-
-                reservations.add(curr);
-
+                reservations.add(constructReservation(reservationEntries));
             }
         }
         return reservations;
+    }
+
+    /**
+     * Retrieve a single reservation by name.
+     *
+     * @return a <code>Reservation</code> whose name matches the query
+     * @throws SQLException if there was an error querying the database
+     */
+    public Reservation getReservationByName(String query) throws SQLException {
+        try (Statement s = databaseConnection.createStatement();
+             ResultSet reservationData = s.executeQuery(String.format("select * from reservations where `CustomerName` = %s", query))) {
+            return constructReservation(reservationData);
+        }
     }
 
     /**
@@ -209,32 +228,13 @@ public class DatabaseAdapter implements AutoCloseable {
      */
     public ArrayList<Reservation> getReservationsForTable(int tableNumber) throws SQLException {
         try (Statement s = databaseConnection.createStatement();
-             ResultSet reservationEntries = s.executeQuery(String.format("select * from reservations where `TableNumber` = %d", tableNumber));) {
+             ResultSet reservationEntries = s.executeQuery(String.format("select * from reservations where `TableNumber` = %d", tableNumber))) {
             ArrayList<Reservation> reservations = new ArrayList<>();
 
             while (reservationEntries.next()) {
-                int reservationID = reservationEntries.getInt("ReservationID");
-                int partySize = reservationEntries.getInt("PartySize");
-                String customerName = reservationEntries.getString("CustomerName");
-                String phoneNumber = reservationEntries.getString("PhoneNumber");
-                LocalDateTime dateTime = reservationEntries.getTimestamp("DateTime").toLocalDateTime();
-
-                Reservation curr = new Reservation(customerName, phoneNumber, dateTime, partySize, tableNumber);
-
-                // Get item preorders and special requests
-                try (ResultSet preorderItems = s.executeQuery(String.format("select * from preorderItems where `ReservationID` = %d", reservationID));
-                     ResultSet specialRequests = s.executeQuery(String.format("select * from specialRequests where `ReservationID` = %d", reservationID))) {
-                    while (preorderItems.next()) {
-                        curr.addPreOrderItem(preorderItems.getString("Item"));
-                    }
-                    while (specialRequests.next()) {
-                        curr.addSpecialRequest(specialRequests.getString("Request"));
-                    }
-                }
-
-                reservations.add(curr);
-
+                reservations.add(constructReservation(reservationEntries));
             }
+
             return reservations;
         }
     }
@@ -260,7 +260,7 @@ public class DatabaseAdapter implements AutoCloseable {
     }
 
     /**
-     * Heler function for creating a <code>LocalDateTime</code> object.
+     * Helper function for creating a <code>LocalDateTime</code> object.
      *
      * @param date the calendar day, preferably in ISO format (YYYY-MM-DD)
      * @param hr   the 2 digit hour to store (24hr time)
