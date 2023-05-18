@@ -111,104 +111,104 @@ public class Dashboard extends JFrame {
     }
 
 
-private class LoginPanel extends JPanel {
-    private JTextField usernameField;
-    private JPasswordField passwordField;
-    private JButton loginButton;
+    private class LoginPanel extends JPanel {
+        private JTextField usernameField;
+        private JPasswordField passwordField;
+        private JButton loginButton;
 
-    public LoginPanel() {
-        setLayout(new BorderLayout());
+        public LoginPanel() {
+            setLayout(new BorderLayout());
 
-        // Create login components
-        JPanel loginFormPanel = new JPanel();
-        loginFormPanel.setLayout(new GridLayout(3, 2, 10, 10));
-        loginFormPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+            // Create login components
+            JPanel loginFormPanel = new JPanel();
+            loginFormPanel.setLayout(new GridLayout(3, 2, 10, 10));
+            loginFormPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
 
-        JLabel usernameLabel = new JLabel("Username:");
-        usernameField = new JTextField(20);
+            JLabel usernameLabel = new JLabel("Username:");
+            usernameField = new JTextField(20);
 
-        JLabel passwordLabel = new JLabel("Password:");
-        passwordField = new JPasswordField(20);
+            JLabel passwordLabel = new JLabel("Password:");
+            passwordField = new JPasswordField(20);
 
-        loginButton = new JButton("Login");
-        loginButton.addActionListener(e -> login());
+            loginButton = new JButton("Login");
+            loginButton.addActionListener(e -> login());
 
-        loginFormPanel.add(usernameLabel);
-        loginFormPanel.add(usernameField);
-        loginFormPanel.add(passwordLabel);
-        loginFormPanel.add(passwordField);
-        loginFormPanel.add(new JLabel());
-        loginFormPanel.add(loginButton);
+            loginFormPanel.add(usernameLabel);
+            loginFormPanel.add(usernameField);
+            loginFormPanel.add(passwordLabel);
+            loginFormPanel.add(passwordField);
+            loginFormPanel.add(new JLabel());
+            loginFormPanel.add(loginButton);
 
-        add(loginFormPanel, BorderLayout.CENTER);
-    }
+            add(loginFormPanel, BorderLayout.CENTER);
+        }
 
-    private void login() {
-        String username = usernameField.getText();
-        String password = String.valueOf(passwordField.getPassword());
+        private void login() {
+            String username = usernameField.getText();
+            String password = String.valueOf(passwordField.getPassword());
 
-        // Perform login authentication logic here
-        // ...
+            // Perform login authentication logic here
+            // ...
 
-        // Example: Open a new file after successful login
-        if (username.equals("admin") && password.equals("password")) {
-            // Open the new file
-            File file = new File("src/userinterface/Test.txt");
-            try {
-                Desktop.getDesktop().open(file);
-                JOptionPane.showMessageDialog(this, "Login successful! File opened.", "Success", JOptionPane.INFORMATION_MESSAGE);
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Error opening file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            // Example: Open a new file after successful login
+            if (username.equals("admin") && password.equals("password")) {
+                // Open the new file
+                File file = new File("src/userinterface/Test.txt");
+                try {
+                    Desktop.getDesktop().open(file);
+                    JOptionPane.showMessageDialog(this, "Login successful! File opened.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(this, "Error opening file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-}
 
-private class ReservationPanel extends JPanel {
-    private JComboBox<String> reservationComboBox;
-    private JTextField nameTextField;
-    private JTextField emailTextField;
-    private JButton submitButton;
+    private class ReservationPanel extends JPanel {
+        private JComboBox<String> reservationComboBox;
+        private JTextField nameTextField;
+        private JTextField emailTextField;
+        private JButton submitButton;
 
-    public ReservationPanel() {
-        setLayout(new BorderLayout());
+        public ReservationPanel() {
+            setLayout(new BorderLayout());
 
-        JPanel reservationFormPanel = new JPanel();
-        reservationFormPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
-        reservationFormPanel.setLayout(new FlowLayout());
+            JPanel reservationFormPanel = new JPanel();
+            reservationFormPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+            reservationFormPanel.setLayout(new FlowLayout());
 
-        JLabel reservationLabel = new JLabel("Select Reservation:");
-        String[] reservationOptions = {"Date: 5/19/2022 @2:15 pm", "Date: 5/19/2022 @3:00 pm", "Date: 5/19/2022 @4:30 pm"};
-        reservationComboBox = new JComboBox<>(reservationOptions);
+            JLabel reservationLabel = new JLabel("Select Reservation:");
+            String[] reservationOptions = {"Date: 5/19/2022 @2:15 pm", "Date: 5/19/2022 @3:00 pm", "Date: 5/19/2022 @4:30 pm"};
+            reservationComboBox = new JComboBox<>(reservationOptions);
 
-        JLabel nameLabel = new JLabel("Name:");
-        nameTextField = new JTextField(20);
+            JLabel nameLabel = new JLabel("Name:");
+            nameTextField = new JTextField(20);
 
-        JLabel emailLabel = new JLabel("Email:");
-        emailTextField = new JTextField(20);
+            JLabel emailLabel = new JLabel("Email:");
+            emailTextField = new JTextField(20);
 
-        submitButton = new JButton("Submit");
-        submitButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String selectedReservation = (String) reservationComboBox.getSelectedItem();
-                String name = nameTextField.getText();
-                String email = emailTextField.getText();
-                String message = "Selected Reservation: " + selectedReservation + "\nName: " + name + "\nEmail: " + email;
-                JOptionPane.showMessageDialog(ReservationPanel.this, message);
-            }
-        });
-        reservationFormPanel.add(reservationLabel);
-        reservationFormPanel.add(reservationComboBox);
-        reservationFormPanel.add(nameLabel);
-        reservationFormPanel.add(nameTextField);
-        reservationFormPanel.add(emailLabel);
-        reservationFormPanel.add(emailTextField);
-        reservationFormPanel.add(new JLabel());
-        reservationFormPanel.add(submitButton);
+            submitButton = new JButton("Submit");
+            submitButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    String selectedReservation = (String) reservationComboBox.getSelectedItem();
+                    String name = nameTextField.getText();
+                    String email = emailTextField.getText();
+                    String message = "Selected Reservation: " + selectedReservation + "\nName: " + name + "\nEmail: " + email;
+                    JOptionPane.showMessageDialog(ReservationPanel.this, message);
+                }
+            });
+            reservationFormPanel.add(reservationLabel);
+            reservationFormPanel.add(reservationComboBox);
+            reservationFormPanel.add(nameLabel);
+            reservationFormPanel.add(nameTextField);
+            reservationFormPanel.add(emailLabel);
+            reservationFormPanel.add(emailTextField);
+            reservationFormPanel.add(new JLabel());
+            reservationFormPanel.add(submitButton);
 
-        add(reservationFormPanel, BorderLayout.CENTER);
+            add(reservationFormPanel, BorderLayout.CENTER);
+        }
     }
-}
 }
