@@ -1,9 +1,13 @@
 package userinterface;
 
 import java.awt.*;
+
+import javax.crypto.spec.PBEKeySpec;
 import javax.swing.*;
+import javax.swing.border.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 
 
 public class Dashboard extends JFrame{
@@ -13,19 +17,28 @@ public class Dashboard extends JFrame{
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 1000);
-        frame.setLayout(null);
-        // // Create a new JLabel with the background image
-        // ImageIcon backgroundImage = new ImageIcon("D:/efrai/Pictures/Camera Roll/rocks.jpg");
-        // JLabel backgroundLabel = new JLabel(backgroundImage);
-        // backgroundLabel.setBounds(0, 0, backgroundImage.getIconWidth(), backgroundImage.getIconHeight());
+        // frame.setLayout(null);
+
+        //create a title
+        TitledBorder border = new TitledBorder("Tony's Italian Restaurant");
+        border.setTitleJustification(TitledBorder.CENTER);
+        border.setTitlePosition(TitledBorder.TOP);
+        JPanel panel = new JPanel();
+        panel.setBorder(border);       
+
+
         
-        // // Add the background label to the content pane of the frame
-        // Container contentPane = frame.getContentPane();
-        // contentPane.add(backgroundLabel);
+        // //Create an array for images
+        // ImageIcon images = new ImageIcon("D:/efrai/Pictures/Camera Roll/style.jpg");
+
+        // JLabel label = new JLabel(images);
         
-        String[] menu = {"Lunch", "Dinner"};
+        //dropdown 
+        String[] menu = {"Menu","Lunch", "Dinner"};
         String[] reservation = {"Make Reservation", "Cancel Reservation"};
         String[] managementSide = {"Contact Management", "Check Inventory", "Update Inventory"};
+
+
         // Create a new combo box using the menu array
         JComboBox<String> comboBox = new JComboBox<>(menu);
         JComboBox<String> comboBox2 = new JComboBox<>(reservation);
@@ -40,23 +53,28 @@ public class Dashboard extends JFrame{
         comboBox2.setBounds(280, 30, 200, 25);
         comboBox3.setBounds(510, 30, 200, 25);
         
-        // Add an ActionListener to the combo box
-        // comboBox.addActionListener(new ActionListener() {
-        //     @Override
-        //     public void actionPerformed(ActionEvent e) {
-        //         // Get the selected item from the combo box
-        //         String selected = (String) comboBox.getSelectedItem();
-                
-        //         // Perform some action based on the selected item
-        //         System.out.println("Selected: " + selected);
-        //     }
-        // });
+        //Add an ActionListener to the combo box
+        comboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Get the selected item from the combo box
+
+                String selected = (String) comboBox.getSelectedItem();
+                if (selected == "Lunch"){
+                    System.out.println("Made it in");
+                }
+                // Perform some action based on the selected item
+                System.out.println("Selected: " + selected);
+            }
+        });
 
 
         // Make the frame visible
         frame.add(comboBox);
         frame.add(comboBox2);
         frame.add(comboBox3);
+        frame.add(panel);
+        // frame.getContentPane().add(label,BorderLayout.CENTER);
         frame.setVisible(true);
     }
 
