@@ -41,8 +41,6 @@ public class ConfigFile {
         Pattern configSection = Pattern.compile("^\\[[\\w]+\\]$");
         Pattern configOption = Pattern.compile("\\w+ *= *[\\w .-]+");
 
-        if (!configFile.isAbsolute())
-            throw new FileNotFoundException("File " + filePath + " is not an absolute path");
         if (!configFile.exists())
             throw new FileNotFoundException("File " + filePath + " was not found on the filesystem");
 

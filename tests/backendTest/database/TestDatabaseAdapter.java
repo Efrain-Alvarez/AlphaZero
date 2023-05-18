@@ -15,7 +15,7 @@ import java.time.format.DateTimeParseException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestDatabaseAdapter {
-    private static final String validConfigPath = "/home/etorres/Programming/cs370/Project/repo/config.ini";
+    private static final String validConfigPath = "config.ini";
     private static DatabaseAdapter db;
 
     @BeforeAll
