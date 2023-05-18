@@ -60,7 +60,7 @@ class TestDatabaseAdapter {
 
     @Test
     void testAddDeleteReservation() throws Exception {
-        Reservation r = new Reservation("test name", "test number", LocalDateTime.now(), 1, 1);
+        Reservation r = new Reservation("test name", "0000000000", LocalDateTime.now(), 1, 1);
         db.addReservation(r);
         db.deleteReservationByName(r.getName());
     }

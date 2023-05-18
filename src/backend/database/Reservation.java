@@ -20,7 +20,7 @@ public class Reservation {
      */
     public Reservation() {
         this.name = "unknown";
-        this.phoneNumber = "unknown";
+        this.phoneNumber = "0000000000";
         this.date = null;
         this.partySize = 0;
         this.tableNumber = -1;
@@ -33,7 +33,7 @@ public class Reservation {
      * Create a single reservation entry for a single party.
      *
      * @param name        name of customer making reservation under
-     * @param phoneNumber phone number to contact customer with
+     * @param phoneNumber 10-digit phone number to contact customer with
      * @param date        date to attach to reservation
      * @param partySize   number of people included in this reservation
      */
@@ -43,6 +43,11 @@ public class Reservation {
         this.date = date;
         this.partySize = partySize;
         this.tableNumber = tableNumber;
+
+        // must be a 10 digit phone number
+        if (phoneNumber.length() != 10) {
+            throw new RuntimeException("Phone number " + phoneNumber + " rejected, invalid format");
+        }
 
         preorderItems = new ArrayList<>();
         specialRequests = new ArrayList<>();
@@ -60,6 +65,16 @@ public class Reservation {
      */
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    /**
+     * @return the phone number of this reservation but formatted as (xxx) xxx-xxxx
+     */
+    public String getPhoneNumberFormatted() {
+        String block1 = phoneNumber.substring(0, 3);
+        String block2 = phoneNumber.substring(3, 6);
+        String block3 = phoneNumber.substring(6, 10);
+        return String.format("(%s) %s-%s", block1, block2, block3);
     }
 
     /**
