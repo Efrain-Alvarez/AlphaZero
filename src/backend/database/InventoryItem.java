@@ -56,4 +56,9 @@ public class InventoryItem {
         }
         amount = newAmount;
     }
+
+    @Override
+    public String toString() {
+        return itemName + " : " + amount;
+    }
 }

@@ -1,113 +1,114 @@
 package userinterface;
 
+import backend.database.DatabaseAdapter;
+import backend.database.InventoryItem;
+import backend.database.Reservation;
+
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Vector;
 
 
-public class Dashboard extends JFrame {
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new Dashboard();
-            }
-        });
-    }
+public class Dashboard extends JFrame implements AutoCloseable {
+    DatabaseAdapter db;
 
     public Dashboard() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Dashboard");
-        setSize(800, 600);
+        try {
+            db = new DatabaseAdapter("config.ini");
 
-        JTabbedPane tabbedPane = new JTabbedPane();
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setTitle("Dashboard");
+            setSize(800, 600);
 
-        JPanel tab1 = new JPanel();
-        tab1.setBackground(Color.WHITE);
-        tab1.setLayout(new BorderLayout());
+            JTabbedPane tabbedPane = new JTabbedPane();
 
-        // Load the original image
-        ImageIcon originalIcon1 = new ImageIcon("src/userinterface/tony.jpg");
-        Image originalImage1 = originalIcon1.getImage();
+            JPanel tab1 = new JPanel();
+            tab1.setBackground(Color.WHITE);
+            tab1.setLayout(new BorderLayout());
 
-        // Resize the image to the desired dimensions
-        int newWidth1 = 800;
-        int newHeight1 = 600;
-        Image resizedImage1 = originalImage1.getScaledInstance(newWidth1, newHeight1, Image.SCALE_SMOOTH);
+            // Load the original image
+            ImageIcon originalIcon1 = new ImageIcon("src/userinterface/tony.jpg");
+            Image originalImage1 = originalIcon1.getImage();
 
-        // Create a new ImageIcon with the resized image
-        ImageIcon resizedIcon1 = new ImageIcon(resizedImage1);
-        JLabel imageLabel1 = new JLabel(resizedIcon1);
-        imageLabel1.setHorizontalAlignment(JLabel.CENTER);
-        tab1.add(imageLabel1, BorderLayout.CENTER);
+            // Resize the image to the desired dimensions
+            int newWidth1 = 800;
+            int newHeight1 = 600;
+            Image resizedImage1 = originalImage1.getScaledInstance(newWidth1, newHeight1, Image.SCALE_SMOOTH);
 
-        // Create a text box with the title
-        JTextField titleTextField1 = new JTextField("Tony's Italian Restaurant");
-        titleTextField1.setFont(new Font("Arial", Font.BOLD, 24));
-        titleTextField1.setEditable(false);
-        titleTextField1.setHorizontalAlignment(JTextField.CENTER);
-        tab1.add(titleTextField1, BorderLayout.NORTH);
+            // Create a new ImageIcon with the resized image
+            ImageIcon resizedIcon1 = new ImageIcon(resizedImage1);
+            JLabel imageLabel1 = new JLabel(resizedIcon1);
+            imageLabel1.setHorizontalAlignment(JLabel.CENTER);
+            tab1.add(imageLabel1, BorderLayout.CENTER);
 
-        JPanel tab2 = new JPanel();
-        tab2.setBackground(Color.WHITE);
-        tab2.setLayout(new BorderLayout());
+            // Create a text box with the title
+            JTextField titleTextField1 = new JTextField("Tony's Italian Restaurant");
+            titleTextField1.setFont(new Font("Arial", Font.BOLD, 24));
+            titleTextField1.setEditable(false);
+            titleTextField1.setHorizontalAlignment(JTextField.CENTER);
+            tab1.add(titleTextField1, BorderLayout.NORTH);
 
-        // Load the image for tab2
-        ImageIcon originalIcon2 = new ImageIcon("src/userinterface/menu.jpg");
-        Image originalImage2 = originalIcon2.getImage();
+            JPanel foodMenuPanel = new JPanel();
+            foodMenuPanel.setBackground(Color.WHITE);
+            foodMenuPanel.setLayout(new BorderLayout());
 
-        // Resize the image to the desired dimensions for tab2
-        int newWidth2 = 800;
-        int newHeight2 = 550;
-        Image resizedImage2 = originalImage2.getScaledInstance(newWidth2, newHeight2, Image.SCALE_SMOOTH);
+            // Load the image for tab2
+            ImageIcon originalIcon2 = new ImageIcon("src/userinterface/menu.jpg");
+            Image originalImage2 = originalIcon2.getImage();
 
-        // Create a new ImageIcon with the resized image for tab2
-        ImageIcon resizedIcon2 = new ImageIcon(resizedImage2);
-        JLabel imageLabel2 = new JLabel(resizedIcon2);
-        imageLabel2.setHorizontalAlignment(JLabel.CENTER);
-        tab2.add(imageLabel2, BorderLayout.CENTER);
+            // Resize the image to the desired dimensions for tab2
+            int newWidth2 = 800;
+            int newHeight2 = 550;
+            Image resizedImage2 = originalImage2.getScaledInstance(newWidth2, newHeight2, Image.SCALE_SMOOTH);
 
-        JPanel tab3 = new JPanel();
-        tab3.setBackground(Color.WHITE);
-        tab3.setLayout(new BorderLayout());
+            // Create a new ImageIcon with the resized image for tab2
+            ImageIcon resizedIcon2 = new ImageIcon(resizedImage2);
+            JLabel imageLabel2 = new JLabel(resizedIcon2);
+            imageLabel2.setHorizontalAlignment(JLabel.CENTER);
+            foodMenuPanel.add(imageLabel2, BorderLayout.CENTER);
 
-        // Load the image for tab3
-        ImageIcon originalIcon3 = new ImageIcon("src/userinterface/wine2.jpg");
-        Image originalImage3 = originalIcon3.getImage();
+            JPanel drinkMenuPanel = new JPanel();
+            drinkMenuPanel.setBackground(Color.WHITE);
+            drinkMenuPanel.setLayout(new BorderLayout());
 
-        // Resize the image to the desired dimensions for tab3
-        int newWidth3 = 800;
-        int newHeight3 = 550;
-        Image resizedImage3 = originalImage3.getScaledInstance(newWidth3, newHeight3, Image.SCALE_SMOOTH);
+            // Load the image for tab3
+            ImageIcon originalIcon3 = new ImageIcon("src/userinterface/wine2.jpg");
+            Image originalImage3 = originalIcon3.getImage();
 
-        // Create a new ImageIcon with the resized image for tab3
-        ImageIcon resizedIcon3 = new ImageIcon(resizedImage3);
-        JLabel imageLabel3 = new JLabel(resizedIcon3);
-        imageLabel3.setHorizontalAlignment(JLabel.CENTER);
-        tab3.add(imageLabel3, BorderLayout.CENTER);
+            // Resize the image to the desired dimensions for tab3
+            int newWidth3 = 800;
+            int newHeight3 = 550;
+            Image resizedImage3 = originalImage3.getScaledInstance(newWidth3, newHeight3, Image.SCALE_SMOOTH);
 
-        JPanel tab4 = new LoginPanel();
-        JPanel tab5 = new ReservationPanel();
+            // Create a new ImageIcon with the resized image for tab3
+            ImageIcon resizedIcon3 = new ImageIcon(resizedImage3);
+            JLabel imageLabel3 = new JLabel(resizedIcon3);
+            imageLabel3.setHorizontalAlignment(JLabel.CENTER);
+            drinkMenuPanel.add(imageLabel3, BorderLayout.CENTER);
 
-        tabbedPane.addTab("Tab 1", tab1);
-        tabbedPane.addTab("Tab 2", tab2);
-        tabbedPane.addTab("Tab 3", tab3);
-        tabbedPane.addTab("Tab 4", tab4);
-        tabbedPane.addTab("Reservations", tab5);
+            JPanel inventoryPanel = new InventoryPanel(db);
+            JPanel reservationsPanel = new ReservationPanel(db);
 
-        // Set the titles for the tabs
-        tabbedPane.setTitleAt(0, "Home");
-        tabbedPane.setTitleAt(1, "Food Menu");
-        tabbedPane.setTitleAt(2, "Drink Menu");
-        tabbedPane.setTitleAt(3, "Login Tab");
-        tabbedPane.setTitleAt(4, "Reservations");
+            tabbedPane.addTab("Home", tab1);
+            tabbedPane.addTab("Food Menu", foodMenuPanel);
+            tabbedPane.addTab("Drink Menu", drinkMenuPanel);
+            tabbedPane.addTab("Inventory", inventoryPanel);
+            tabbedPane.addTab("Reservations", reservationsPanel);
 
-        getContentPane().add(tabbedPane);
+            getContentPane().add(tabbedPane);
 
-        setVisible(true);
+            setVisible(true);
+        }  catch (Exception e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
+        }
     }
 
 
@@ -172,7 +173,7 @@ public class Dashboard extends JFrame {
         private JTextField emailTextField;
         private JButton submitButton;
 
-        public ReservationPanel() {
+        public ReservationPanel(DatabaseAdapter db) {
             setLayout(new BorderLayout());
 
             JPanel reservationFormPanel = new JPanel();
@@ -180,8 +181,7 @@ public class Dashboard extends JFrame {
             reservationFormPanel.setLayout(new FlowLayout());
 
             JLabel reservationLabel = new JLabel("Select Reservation:");
-            String[] reservationOptions = {"Date: 5/19/2022 @2:15 pm", "Date: 5/19/2022 @3:00 pm", "Date: 5/19/2022 @4:30 pm"};
-            reservationComboBox = new JComboBox<>(reservationOptions);
+            reservationComboBox = new JComboBox<>();
 
             JLabel nameLabel = new JLabel("Name:");
             nameTextField = new JTextField(20);
@@ -192,11 +192,12 @@ public class Dashboard extends JFrame {
             submitButton = new JButton("Submit");
             submitButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    String selectedReservation = (String) reservationComboBox.getSelectedItem();
-                    String name = nameTextField.getText();
-                    String email = emailTextField.getText();
-                    String message = "Selected Reservation: " + selectedReservation + "\nName: " + name + "\nEmail: " + email;
-                    JOptionPane.showMessageDialog(ReservationPanel.this, message);
+                    try {
+                        refreshReservationList(db.getReservations());
+                    } catch (SQLException s) {
+                        System.err.println(s);
+                        return;
+                    }
                 }
             });
             reservationFormPanel.add(reservationLabel);
@@ -205,10 +206,78 @@ public class Dashboard extends JFrame {
             reservationFormPanel.add(nameTextField);
             reservationFormPanel.add(emailLabel);
             reservationFormPanel.add(emailTextField);
-            reservationFormPanel.add(new JLabel());
             reservationFormPanel.add(submitButton);
 
             add(reservationFormPanel, BorderLayout.CENTER);
         }
+
+        public void refreshReservationList(ArrayList<Reservation> reservationsList) {
+            reservationComboBox = new JComboBox<>();
+            for (Reservation r : reservationsList)
+                reservationComboBox.addItem(r.toString());
+        }
+    }
+
+    private class InventoryPanel extends JPanel {
+        private JButton addButton;
+        private JTable inventoryTable;
+
+        public InventoryPanel(DatabaseAdapter db) {
+            setLayout(new BorderLayout());
+
+            JPanel inventoryPanel = new JPanel();
+            inventoryPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+            inventoryPanel.setLayout(new FlowLayout());
+            inventoryTable = new JTable();
+
+            JLabel tableLabel = new JLabel("Restaurant Inventory");
+            addButton = new JButton("Add Item");
+            addButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        refreshInventoryList(db.getItems());
+                    } catch (Exception f) {
+                        System.err.println(f.getMessage());
+                    }
+                }
+            });
+            inventoryPanel.add(tableLabel);
+            add(inventoryPanel, BorderLayout.CENTER);
+            add(addButton);
+        }
+
+        public void refreshInventoryList(ArrayList<InventoryItem> inventoryList) {
+            inventoryTable = new JTable(new InventoryTableModel());
+            this.revalidate();
+            this.repaint();
+        }
+    }
+    class InventoryTableModel extends AbstractTableModel {
+        private String[] columnNames = {"Item", "Data"};
+        private Object[][] data = ...//same as before...
+
+        public int getColumnCount() {
+            return columnNames.length;
+        }
+
+        public int getRowCount() {
+            return data.length;
+        }
+
+        public String getColumnName(int col) {
+            return columnNames[col];
+        }
+
+        public Object getValueAt(int row, int col) {
+            return data[row][col];
+        }
+
+        public Class getColumnClass(int c) {
+            return getValueAt(0, c).getClass();
+        }
+
+    @Override
+    public void close() throws Exception {
+        db.close();
     }
 }

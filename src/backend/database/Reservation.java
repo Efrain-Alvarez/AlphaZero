@@ -144,4 +144,9 @@ public class Reservation {
     public int hashCode() {
         return Objects.hash(preorderItems, specialRequests, name, phoneNumber, date, partySize, tableNumber);
     }
+
+    @Override
+    public String toString() {
+        return name + " " + getPhoneNumberFormatted() + " " + date.toString() + " " + partySize + " " + tableNumber;
+    }
 }
