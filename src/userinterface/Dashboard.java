@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 
 public class Dashboard extends JFrame {
@@ -146,14 +148,22 @@ private class LoginPanel extends JPanel {
         // Perform login authentication logic here
         // ...
 
-        // Example: Display a message dialog with the login status
+        // Example: Open a new file after successful login
         if (username.equals("admin") && password.equals("password")) {
-            JOptionPane.showMessageDialog(this, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            // Open the new file
+            File file = new File("src/userinterface/Test.txt");
+            try {
+                Desktop.getDesktop().open(file);
+                JOptionPane.showMessageDialog(this, "Login successful! File opened.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error opening file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
+
 private class ReservationPanel extends JPanel {
     private JComboBox<String> reservationComboBox;
     private JTextField nameTextField;
