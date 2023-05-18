@@ -1,20 +1,22 @@
 package backendTest.config;
 
 import backend.config.ConfigFile;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.io.IOError;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TestConfigFile {
-    @Test
-    public void testNormalRead() {
-        try {
-            ConfigFile f = new ConfigFile("/home/etorres/Programming/cs370/Project/repo/config.ini");
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
+    private static final String validConfigPath = "/home/etorres/Programming/cs370/Project/repo/config.ini";
+    private static ConfigFile f;
+
+    @BeforeAll
+    static void beforeAll() throws FileNotFoundException, IOError {
+        f = new ConfigFile(validConfigPath);
     }
 
     @Test
@@ -56,12 +58,7 @@ class TestConfigFile {
     @Test
     public void testReadsAllOpts() {
         int expectedOpts = 5;
-        try {
-            ConfigFile f = new ConfigFile("/home/etorres/Programming/cs370/Project/repo/config.ini");
-            assertThrows(IllegalArgumentException.class, () -> f.getOption("database", "nope"));
-            assertEquals(f.size(), expectedOpts);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        assertThrows(IllegalArgumentException.class, () -> f.getOption("database", "nope"));
+        assertEquals(f.size(), expectedOpts);
     }
 }
