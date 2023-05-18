@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Dashboard extends JFrame {
 
@@ -83,17 +85,20 @@ public class Dashboard extends JFrame {
         tab3.add(imageLabel3, BorderLayout.CENTER);
 
         JPanel tab4 = new LoginPanel();
+        JPanel tab5 = new ReservationPanel();
 
         tabbedPane.addTab("Tab 1", tab1);
         tabbedPane.addTab("Tab 2", tab2);
         tabbedPane.addTab("Tab 3", tab3);
         tabbedPane.addTab("Tab 4", tab4);
+        tabbedPane.addTab("Reservations", tab5);
 
         // Set the titles for the tabs
         tabbedPane.setTitleAt(0, "Home");
         tabbedPane.setTitleAt(1, "Food Menu");
         tabbedPane.setTitleAt(2, "Drink Menu");
         tabbedPane.setTitleAt(3, "Login Tab");
+        tabbedPane.setTitleAt(4, "Reservations");
 
         getContentPane().add(tabbedPane);
 
@@ -148,4 +153,35 @@ private class LoginPanel extends JPanel {
         }
     }
 }
+private class ReservationPanel extends JPanel {
+    private JComboBox<String> reservationComboBox;
+    private JButton submitButton;
+
+    public ReservationPanel() {
+        setLayout(new BorderLayout());
+
+        JPanel reservationFormPanel = new JPanel();
+        reservationFormPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+        reservationFormPanel.setLayout(new FlowLayout());
+
+        JLabel reservationLabel = new JLabel("Select Reservation:");
+        String[] reservationOptions = {"Option 1", "Option 2", "Option 3"};
+        reservationComboBox = new JComboBox<>(reservationOptions);
+
+        submitButton = new JButton("Submit");
+        submitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String selectedReservation = (String) reservationComboBox.getSelectedItem();
+                JOptionPane.showMessageDialog(ReservationPanel.this, "Selected Reservation: " + selectedReservation);
+            }
+        });
+
+        reservationFormPanel.add(reservationLabel);
+        reservationFormPanel.add(reservationComboBox);
+        reservationFormPanel.add(submitButton);
+
+        add(reservationFormPanel, BorderLayout.CENTER);
+    }
 }
+}
+
