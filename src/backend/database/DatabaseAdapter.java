@@ -260,7 +260,7 @@ public class DatabaseAdapter implements AutoCloseable {
     }
 
     /**
-     * Heler function for creating a <code>LocalDateTime</code> object.
+     * Helper function for creating a <code>LocalDateTime</code> object.
      *
      * @param date the calendar day, preferably in ISO format (YYYY-MM-DD)
      * @param hr   the 2 digit hour to store (24hr time)
